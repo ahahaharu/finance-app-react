@@ -1,12 +1,20 @@
 import React from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
+import { useExpenses } from '../../../context/ExpensesContext';
 
-export default function Chart({ data }) {
+export default function Chart() {
+  const { expenses } = useExpenses();
+
+  const data = expenses.map((expense) => ({
+    label: expense.category,
+    value: parseFloat(expense.amount),
+    color: expense.color,
+  }));
   return (
     <PieChart
       series={[
         {
-          data,
+          data: data || [],
           innerRadius: 30,
           outerRadius: 100,
           paddingAngle: 5,

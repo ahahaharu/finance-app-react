@@ -9,7 +9,7 @@ export default function ToggleSources() {
       >
         Expenses
       </div>
-      <div className="py-1 px-3 rounded-md cursor-pointe hover:bg-sky-100">
+      <div className="py-1 px-3 rounded-md cursor-pointer hover:bg-sky-100">
         Income
       </div>
     </div>
