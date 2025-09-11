@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import SourceCard from './SourceCard';
 import { useExpenses } from '../../../context/ExpensesContext';
 import { Bus, Utensils } from 'lucide-react';
+import { CATEGORIES } from '../../../constants/expenseConstants';
 
 const INITIAL_EXPENSES = [
   {
@@ -10,8 +11,8 @@ const INITIAL_EXPENSES = [
     date: '2023-09-10',
     category: 'Cafe',
     account: 'Cash',
-    iconName: 'Utensils',
-    color: '#ef4444',
+    iconName: CATEGORIES[6].icon,
+    color: CATEGORIES[6].color,
   },
   {
     description: 'Transport',
@@ -19,8 +20,8 @@ const INITIAL_EXPENSES = [
     date: '2023-09-11',
     category: 'Transport',
     account: 'Card',
-    iconName: 'Bus',
-    color: '#3b82f6',
+    iconName: CATEGORIES[1].icon,
+    color: CATEGORIES[1].color,
   },
 ];
 
@@ -34,10 +35,6 @@ export default function SourceCards() {
     }
     initialized.current = true;
   }, [expenses.length]);
-
-  function setTailwindColor(color) {
-    return `text-[${color}]`;
-  }
 
   const getIconComponent = (iconName) => {
     const icons = {
@@ -54,7 +51,7 @@ export default function SourceCards() {
           key={item.id}
           icon={getIconComponent(item.iconName)}
           category={item.category}
-          color={setTailwindColor(item.color)}
+          color={item.color}
         />
       ))}
     </div>

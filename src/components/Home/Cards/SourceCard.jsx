@@ -5,7 +5,8 @@ export default function SourceCard({ icon, category, color }) {
   console.log(styleColor);
   return (
     <div
-      className={`flex gap-3 border-[#1677ff] ${styleColor} items-center border-2 p-3 rounded-2xl shadow-md`}
+      style={{ color: styleColor }}
+      className={`flex gap-3 border-[#1677ff] items-center border-2 p-3 rounded-2xl shadow-md`}
     >
       {icon} <h1 className="text-2xl">{category}</h1>
     </div>

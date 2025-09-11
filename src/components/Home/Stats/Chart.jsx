@@ -12,6 +12,7 @@ export default function Chart() {
   }));
   return (
     <PieChart
+      className="cursor-pointer"
       series={[
         {
           data: data || [],
