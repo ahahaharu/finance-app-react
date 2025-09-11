@@ -2,7 +2,6 @@ import React from 'react';
 
 export default function SourceCard({ icon, category, color }) {
   const styleColor = color;
-  console.log(styleColor);
   return (
     <div
       style={{ color: styleColor }}

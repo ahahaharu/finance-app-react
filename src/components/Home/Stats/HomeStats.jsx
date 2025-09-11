@@ -9,7 +9,6 @@ import AdditionalModal from '../Modal/AdditionalModal';
 export default function HomeStats() {
   const [additionModalOpen, setAdditionalModalOpen] = useState(false);
 
-  console.log('Home stats ', additionModalOpen);
   function handleAdditionalModalOpen() {
     setAdditionalModalOpen(true);
   }

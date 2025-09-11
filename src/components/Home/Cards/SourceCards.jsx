@@ -2,18 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import SourceCard from './SourceCard';
 import { useExpenses } from '../../../context/ExpensesContext';
 import { Bus, Utensils } from 'lucide-react';
-import { CATEGORIES } from '../../../constants/expenseConstants';
+import { CATEGORIES, EXPENSE_ICONS } from '../../../constants/expenseConstants';
 
 const INITIAL_EXPENSES = [
-  {
-    description: 'Cafe',
-    amount: '25.50',
-    date: '2023-09-10',
-    category: 'Cafe',
-    account: 'Cash',
-    iconName: CATEGORIES[6].icon,
-    color: CATEGORIES[6].color,
-  },
   {
     description: 'Transport',
     amount: '15.00',
@@ -22,6 +13,24 @@ const INITIAL_EXPENSES = [
     account: 'Card',
     iconName: CATEGORIES[1].icon,
     color: CATEGORIES[1].color,
+  },
+  {
+    description: 'Sport',
+    amount: '35.00',
+    date: '2023-09-11',
+    category: 'Sport',
+    account: 'Cash',
+    iconName: CATEGORIES[3].icon,
+    color: CATEGORIES[3].color,
+  },
+  {
+    description: 'Food',
+    amount: '20.00',
+    date: '2023-09-11',
+    category: 'Food',
+    account: 'Cash',
+    iconName: CATEGORIES[0].icon,
+    color: CATEGORIES[0].color,
   },
 ];
 
@@ -37,11 +46,7 @@ export default function SourceCards() {
   }, [expenses.length]);
 
   const getIconComponent = (iconName) => {
-    const icons = {
-      Utensils: <Utensils size={30} />,
-      Bus: <Bus size={30} />,
-    };
-    return icons[iconName];
+    return EXPENSE_ICONS[iconName];
   };
 
   return (

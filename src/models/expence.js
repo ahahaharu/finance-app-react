@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export const DEFAULT_EXPENSE = {
   id: null,
   description: '',
@@ -13,7 +15,7 @@ export function createExpense(data) {
   return {
     ...DEFAULT_EXPENSE,
     ...data,
-    id: Date.now(),
+    id: uuidv4(),
     amount: parseFloat(data.amount),
     date: new Date(data.date),
   };

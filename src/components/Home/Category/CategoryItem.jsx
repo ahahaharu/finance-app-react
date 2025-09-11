@@ -4,8 +4,8 @@ import { EXPENSE_ICONS } from '../../../constants/expenseConstants';
 export default function CategoryItem({ category, isSelected, onClick }) {
   return (
     <div
-      className={`flex flex-col items-center justify-center w-1/5 p-0.5 rounded cursor-pointer text-xs text-left transition-all ${
-        isSelected ? 'border-1 border-blue-500 bg-sky-50 shadow-md' : ''
+      className={`flex flex-col items-center justify-center w-1/5 p-0.5 rounded cursor-pointer text-xs text-left hover:bg-sky-50 transition-all  ${
+        isSelected ? 'border-1 border-blue-500 bg-sky-100 shadow-md' : ''
       }`}
       style={{ color: category.color }}
       onClick={onClick}

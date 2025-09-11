@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import { CATEGORIES } from '../../../constants/expenseConstants';
 import { CircleEllipsis } from 'lucide-react';
 import CategoryItem from '../Category/CategoryItem';
+import MoreCategoriesModal from './MoreCategoriesModal';
 
 export default function AdditionalModal({ title, isOpen, onCancel }) {
   const [form] = Form.useForm();
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [moreCategoriesModalOpen, setMoreCategoriesModalOpen] = useState(false);
 
   const handleSubmit = (values) => {
     console.log('Form values:', values);
@@ -66,8 +68,10 @@ export default function AdditionalModal({ title, isOpen, onCancel }) {
               />
             ))}
             <button
-              className="flex flex-col items-center justify-center w-1/5 p-0.5 rounded cursor-pointer text-xs text-left transition-all"
+              type="button"
+              className="flex flex-col items-center justify-center w-1/5 p-0.5 rounded cursor-pointer text-xs text-left hover:bg-sky-50 transition-all"
               style={{ color: '#6b7280' }}
+              onClick={() => setMoreCategoriesModalOpen(true)}
             >
               <CircleEllipsis size={25} />
               <span className="text-center mt-1 w-full whitespace-nowrap overflow-hidden text-ellipsis">
@@ -77,6 +81,14 @@ export default function AdditionalModal({ title, isOpen, onCancel }) {
           </div>
         </Form.Item>
       </Form>
+
+      {moreCategoriesModalOpen && (
+        <MoreCategoriesModal
+          title={'More Categories'}
+          isOpen={moreCategoriesModalOpen}
+          onCancel={() => setMoreCategoriesModalOpen(false)}
+        />
+      )}
     </Modal>
   );
 }
