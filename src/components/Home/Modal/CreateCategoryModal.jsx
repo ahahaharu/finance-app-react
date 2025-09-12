@@ -1,8 +1,9 @@
-import { Form, Input, Modal, Radio } from 'antd';
-import React, { useState } from 'react';
-import { EXPENSE_ICONS } from '../../../constants/expenseConstants';
-import { CircleEllipsis } from 'lucide-react';
+import { ColorPicker, Form, Input, Modal, Radio } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { COLORS, EXPENSE_ICONS } from '../../../constants/expenseConstants';
+import { CircleEllipsis, Plus } from 'lucide-react';
 import MoreIconsModal from './MoreIconsModal';
+import { ChromePicker } from 'react-color';
 
 const options = [
   { label: 'Expenses', value: 'Expenses' },
@@ -13,6 +14,31 @@ export default function CreateCategoryModal({ title, isOpen, onCancel }) {
   const [form] = Form.useForm();
   const [selectedIcon, setSelectedIcon] = useState('Utensils');
   const [moreIconsModalOpen, setMoreIconsModalOpen] = useState(false);
+  const [anotherIconSelected, setAnotherIconSelected] = useState(false);
+  const [selectedColor, setSelectedColor] = useState({ hex: COLORS.red });
+  const [pickerOpened, setPickerOpened] = useState(false);
+  const [isColorPickerColor, setIsColorPickerColor] = useState(false);
+
+  console.log(Object.keys(COLORS));
+
+  function isAnotherIcon() {
+    if (!anotherIconSelected) {
+      return false;
+    }
+
+    if (Object.keys(EXPENSE_ICONS).slice(0, 11).includes(anotherIconSelected)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  useEffect(() => {
+    if (anotherIconSelected) {
+      setSelectedIcon(anotherIconSelected);
+      form.setFieldsValue({ icon: anotherIconSelected });
+    }
+  }, [anotherIconSelected]);
 
   function handleSubmit(values) {
     console.log('Form values:', values);
@@ -23,6 +49,25 @@ export default function CreateCategoryModal({ title, isOpen, onCancel }) {
     setSelectedIcon(iconName);
     form.setFieldsValue({ icon: iconName });
   };
+
+  const handleColorClick = (colorKey) => {
+    const newColor = { hex: COLORS[colorKey] };
+
+    setSelectedColor(newColor);
+    setIsColorPickerColor(false);
+    form.setFieldsValue({ color: colorKey });
+  };
+
+  const handleColorChange = (color) => {
+    setIsColorPickerColor(true);
+    setSelectedColor(color);
+  };
+
+  const handleColorChangeComplete = (color) => {
+    form.setFieldsValue({ color: color.hex });
+  };
+
+  const sliceEnd = isAnotherIcon() ? 8 : 9;
 
   return (
     <Modal title={title} open={isOpen} onCancel={onCancel} onOk={onCancel}>
@@ -57,15 +102,28 @@ export default function CreateCategoryModal({ title, isOpen, onCancel }) {
           name="icon"
           rules={[{ required: true, message: 'Please select an icon!' }]}
         >
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2 justify-center">
+            {isAnotherIcon() && (
+              <div
+                className={`flex flex-col items-center justify-center px-2 rounded cursor-pointer text-xs text-left hover:bg-sky-50 transition-all ${
+                  selectedIcon === anotherIconSelected
+                    ? 'ring-2 ring-offset-2 ring-blue-500 bg-sky-200'
+                    : ''
+                }`}
+                style={{ color: '#000000' }}
+                onClick={() => handleIconClick(anotherIconSelected)}
+              >
+                {EXPENSE_ICONS[anotherIconSelected]}
+              </div>
+            )}
             {Object.keys(EXPENSE_ICONS)
-              .slice(0, 11)
+              .slice(0, sliceEnd)
               .map((iconName) => (
                 <div
                   key={iconName}
-                  className={`p-2 rounded cursor-pointer hover:bg-sky-50 ${
+                  className={`p-2 rounded cursor-pointer hover:bg-sky-50 transition-all ${
                     selectedIcon === iconName
-                      ? 'border border-blue-500 bg-sky-200'
+                      ? 'ring-2 ring-offset-2 ring-blue-500 bg-sky-200'
                       : ''
                   }`}
                   onClick={() => handleIconClick(iconName)}
@@ -88,6 +146,55 @@ export default function CreateCategoryModal({ title, isOpen, onCancel }) {
             </button>
           </div>
         </Form.Item>
+
+        <Form.Item
+          label="Color"
+          name="color"
+          rules={[{ required: true, message: 'Please select a color!' }]}
+        >
+          <div className="flex flex-wrap gap-3 items- justify-center relative">
+            {Object.keys(COLORS).map((colorKey) => (
+              <div
+                key={colorKey}
+                className={`w-5 h-5 rounded-full cursor-pointer ${
+                  selectedColor.hex === COLORS[colorKey]
+                    ? 'ring-2 ring-offset-2'
+                    : ''
+                }`}
+                style={{ backgroundColor: COLORS[colorKey] }}
+                onClick={() => handleColorClick(colorKey)}
+              />
+            ))}
+            <div
+              className={`w-5 h-5 rounded-full border-2 border-dashed border-gray-400 flex items-center justify-center cursor-pointer hover:border-gray-600 ${
+                isColorPickerColor ? 'ring-2 ring-offset-2' : ''
+              }`}
+              onClick={() => setPickerOpened(!pickerOpened)}
+              style={
+                isColorPickerColor
+                  ? { backgroundColor: selectedColor.hex, borderColor: '#000' }
+                  : {}
+              }
+            >
+              <Plus size={12} />
+            </div>
+            {pickerOpened && (
+              <div className="fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-2 rounded shadow-lg">
+                <ChromePicker
+                  color={selectedColor.hex}
+                  onChange={handleColorChange}
+                  onChangeComplete={handleColorChangeComplete}
+                />
+                <button
+                  onClick={() => setPickerOpened(false)}
+                  className="mt-2 px-4 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                >
+                  Close
+                </button>
+              </div>
+            )}
+          </div>
+        </Form.Item>
       </Form>
 
       {moreIconsModalOpen && (
@@ -95,6 +202,7 @@ export default function CreateCategoryModal({ title, isOpen, onCancel }) {
           title={'More Icons'}
           isOpen={moreIconsModalOpen}
           onCancel={() => setMoreIconsModalOpen(false)}
+          setIcon={setAnotherIconSelected}
         />
       )}
     </Modal>
