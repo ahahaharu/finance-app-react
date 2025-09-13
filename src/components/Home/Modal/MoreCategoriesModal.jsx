@@ -4,14 +4,16 @@ import CategoryItem from '../Category/CategoryItem';
 import { CATEGORIES } from '../../../constants/expenseConstants';
 import { Plus } from 'lucide-react';
 import CreateCategoryModal from './CreateCategoryModal';
+import { useCategories } from '../../../context/CategoryContext';
 
 export default function MoreCategoriesModal({ title, isOpen, onCancel }) {
   const [createCategoryModalOpen, setCreateCategoryModalOpen] = useState(false);
+  const { categories } = useCategories();
 
   return (
     <Modal title={title} open={isOpen} onCancel={onCancel} onOk={onCancel}>
-      <div className="flex flex-wrap gap-3 justify-between">
-        {CATEGORIES.map((category) => (
+      <div className="flex flex-wrap gap-3 justify-start">
+        {categories.map((category) => (
           <CategoryItem key={category.name} category={category} />
         ))}
         <button

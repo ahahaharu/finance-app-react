@@ -74,6 +74,7 @@ export const COLORS = {
   purple: '#a855f7',
   orange: '#f97316',
   teal: '#14b8a6',
+  pink: '#ec4899',
 };
 
 export const CATEGORIES = [

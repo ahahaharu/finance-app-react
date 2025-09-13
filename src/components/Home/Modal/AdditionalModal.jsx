@@ -4,11 +4,13 @@ import { CATEGORIES } from '../../../constants/expenseConstants';
 import { CircleEllipsis } from 'lucide-react';
 import CategoryItem from '../Category/CategoryItem';
 import MoreCategoriesModal from './MoreCategoriesModal';
+import { useCategories } from '../../../context/CategoryContext';
 
 export default function AdditionalModal({ title, isOpen, onCancel }) {
   const [form] = Form.useForm();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [moreCategoriesModalOpen, setMoreCategoriesModalOpen] = useState(false);
+  const { categories } = useCategories();
 
   const handleSubmit = (values) => {
     console.log('Form values:', values);
@@ -58,8 +60,8 @@ export default function AdditionalModal({ title, isOpen, onCancel }) {
           name="category"
           rules={[{ required: true, message: 'Please select a category!' }]}
         >
-          <div className="flex flex-wrap gap-3 justify-between">
-            {CATEGORIES.slice(0, 7).map((category) => (
+          <div className="flex flex-wrap gap-3 justify-start">
+            {categories.slice(0, 7).map((category) => (
               <CategoryItem
                 key={category.name}
                 category={category}

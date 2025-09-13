@@ -1,9 +1,10 @@
-import { ColorPicker, Form, Input, Modal, Radio } from 'antd';
+import { Button, Form, Input, Modal, Radio } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { COLORS, EXPENSE_ICONS } from '../../../constants/expenseConstants';
 import { CircleEllipsis, Plus } from 'lucide-react';
 import MoreIconsModal from './MoreIconsModal';
 import { ChromePicker } from 'react-color';
+import { useCategories } from '../../../context/CategoryContext';
 
 const options = [
   { label: 'Expenses', value: 'Expenses' },
@@ -18,8 +19,7 @@ export default function CreateCategoryModal({ title, isOpen, onCancel }) {
   const [selectedColor, setSelectedColor] = useState({ hex: COLORS.red });
   const [pickerOpened, setPickerOpened] = useState(false);
   const [isColorPickerColor, setIsColorPickerColor] = useState(false);
-
-  console.log(Object.keys(COLORS));
+  const { addCategory } = useCategories();
 
   function isAnotherIcon() {
     if (!anotherIconSelected) {
@@ -40,10 +40,32 @@ export default function CreateCategoryModal({ title, isOpen, onCancel }) {
     }
   }, [anotherIconSelected]);
 
+  useEffect(() => {
+    if (isOpen) {
+      form.resetFields();
+      form.setFieldsValue({
+        categoryName: '',
+        type: 'Expenses',
+        icon: 'Utensils',
+        color: 'red',
+      });
+      setSelectedIcon('Utensils');
+      setSelectedColor({ hex: COLORS.red });
+    }
+  }, [isOpen]);
   function handleSubmit(values) {
     console.log('Form values:', values);
+    addCategory({
+      name: values.categoryName,
+      icon: values.icon,
+      color: values.color,
+    });
     onCancel();
   }
+
+  const onFinishFailed = (errorInfo) => {
+    console.log('Validation failed:', errorInfo);
+  };
 
   const handleIconClick = (iconName) => {
     setSelectedIcon(iconName);
@@ -52,7 +74,6 @@ export default function CreateCategoryModal({ title, isOpen, onCancel }) {
 
   const handleColorClick = (colorKey) => {
     const newColor = { hex: COLORS[colorKey] };
-
     setSelectedColor(newColor);
     setIsColorPickerColor(false);
     form.setFieldsValue({ color: colorKey });
@@ -70,13 +91,26 @@ export default function CreateCategoryModal({ title, isOpen, onCancel }) {
   const sliceEnd = isAnotherIcon() ? 8 : 9;
 
   return (
-    <Modal title={title} open={isOpen} onCancel={onCancel} onOk={onCancel}>
+    <Modal
+      title={title}
+      open={isOpen}
+      onCancel={onCancel}
+      onOk={onCancel}
+      footer={null}
+    >
       <Form
         form={form}
         labelCol={{ span: 7 }}
         wrapperCol={{ span: 14 }}
         layout="horizontal"
         onFinish={handleSubmit}
+        onFinishFailed={onFinishFailed}
+        initialValues={{
+          // Инициализация дефолтных значений на уровне Form
+          type: 'Expenses',
+          icon: 'Utensils',
+          color: 'red',
+        }}
         style={{ maxWidth: 600 }}
       >
         <Form.Item
@@ -87,16 +121,9 @@ export default function CreateCategoryModal({ title, isOpen, onCancel }) {
         >
           <Input placeholder="Category Name" />
         </Form.Item>
-
         <Form.Item label="Type" name="type" style={{ marginBottom: '20px' }}>
-          <Radio.Group
-            block
-            options={options}
-            defaultValue="Expenses"
-            optionType="button"
-          />
+          <Radio.Group bblock options={options} optionType="button" />
         </Form.Item>
-
         <Form.Item
           label="Icon"
           name="icon"
@@ -146,25 +173,26 @@ export default function CreateCategoryModal({ title, isOpen, onCancel }) {
             </button>
           </div>
         </Form.Item>
-
         <Form.Item
           label="Color"
           name="color"
           rules={[{ required: true, message: 'Please select a color!' }]}
         >
           <div className="flex flex-wrap gap-3 items- justify-center relative">
-            {Object.keys(COLORS).map((colorKey) => (
-              <div
-                key={colorKey}
-                className={`w-5 h-5 rounded-full cursor-pointer ${
-                  selectedColor.hex === COLORS[colorKey]
-                    ? 'ring-2 ring-offset-2'
-                    : ''
-                }`}
-                style={{ backgroundColor: COLORS[colorKey] }}
-                onClick={() => handleColorClick(colorKey)}
-              />
-            ))}
+            {Object.keys(COLORS)
+              .slice(0, 7)
+              .map((colorKey) => (
+                <div
+                  key={colorKey}
+                  className={`w-5 h-5 rounded-full cursor-pointer ${
+                    selectedColor.hex === COLORS[colorKey]
+                      ? 'ring-2 ring-offset-2'
+                      : ''
+                  }`}
+                  style={{ backgroundColor: COLORS[colorKey] }}
+                  onClick={() => handleColorClick(colorKey)}
+                />
+              ))}
             <div
               className={`w-5 h-5 rounded-full border-2 border-dashed border-gray-400 flex items-center justify-center cursor-pointer hover:border-gray-600 ${
                 isColorPickerColor ? 'ring-2 ring-offset-2' : ''
@@ -193,6 +221,16 @@ export default function CreateCategoryModal({ title, isOpen, onCancel }) {
                 </button>
               </div>
             )}
+          </div>
+        </Form.Item>
+        <Form.Item wrapperCol={{ offset: 7, span: 14 }}>
+          <div className="flex justify-end gap-2">
+            <Button key="cancel" onClick={onCancel}>
+              Cancel
+            </Button>
+            <Button type="primary" htmlType="submit" onSubmit={handleSubmit}>
+              Add category
+            </Button>
           </div>
         </Form.Item>
       </Form>

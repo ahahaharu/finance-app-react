@@ -1,16 +1,29 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { createCategory } from '../models/category';
+import { CATEGORIES } from '../constants/expenseConstants';
 
 const CategoriesContext = createContext();
 
 export function CategoriesProvider({ children }) {
   const [categories, setCategories] = useState(() => {
     const savedCategories = localStorage.getItem('categories');
-    return savedCategories ? JSON.parse(savedCategories) : [];
+    if (savedCategories) {
+      return JSON.parse(savedCategories);
+    } else {
+      const defaultCategories = CATEGORIES.map((cat) =>
+        createCategory({
+          name: cat.name,
+          icon: cat.icon,
+          color: cat.color,
+        })
+      );
+      localStorage.setItem('categories', JSON.stringify(defaultCategories));
+      return defaultCategories;
+    }
   });
 
   useEffect(() => {
-    localStorage.setItem('categories', JSON.stringify(expenses));
+    localStorage.setItem('categories', JSON.stringify(categories));
   }, [categories]);
 
   const addCategory = (data) => {
@@ -36,9 +49,9 @@ export function CategoriesProvider({ children }) {
 }
 
 export function useCategories() {
-  const context = useContext(CategoryContext);
+  const context = useContext(CategoriesContext);
   if (!context) {
-    throw new Error('useExpenses must be used within an CategoriesProvider');
+    throw new Error('useCategories must be used within an CategoriesProvider');
   }
   return context;
 }
