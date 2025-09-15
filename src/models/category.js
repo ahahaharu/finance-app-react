@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 export const DEFAULT_CATEGORY = {
   id: null,
   name: '',
+  type: '',
   icon: '',
   color: '',
 };

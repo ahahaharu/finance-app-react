@@ -11,6 +11,8 @@ import { useCategories } from '../../../context/CategoryContext';
 export default function MoreCategoriesModal({ title, isOpen, onCancel }) {
   const [createCategoryModalOpen, setCreateCategoryModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState();
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [initialData, setInitialData] = useState(null);
   const { categories, removeCategory } = useCategories();
 
   function handleDeleteCategory() {
@@ -20,6 +22,22 @@ export default function MoreCategoriesModal({ title, isOpen, onCancel }) {
 
     removeCategory(category.id);
     setSelectedCategory('');
+  }
+
+  function handleModalCancel() {
+    setCreateCategoryModalOpen(false);
+    setIsEditMode(false);
+    setInitialData(null);
+  }
+
+  function handleEditCategory() {
+    const category = categories.find(
+      (category) => category.name === selectedCategory
+    );
+
+    setInitialData(category);
+    setIsEditMode(true);
+    setCreateCategoryModalOpen(true);
   }
 
   return (
@@ -62,7 +80,7 @@ export default function MoreCategoriesModal({ title, isOpen, onCancel }) {
             >
               Delete
             </Button>
-            <Button onClick={onCancel} icon={<Pencil size={15} />}>
+            <Button onClick={handleEditCategory} icon={<Pencil size={15} />}>
               Edit
             </Button>
             <Button
@@ -80,9 +98,11 @@ export default function MoreCategoriesModal({ title, isOpen, onCancel }) {
 
       {createCategoryModalOpen && (
         <CreateCategoryModal
-          title={'Create Category'}
+          title={isEditMode ? 'Edit Category' : 'Create Category'}
           isOpen={createCategoryModalOpen}
-          onCancel={() => setCreateCategoryModalOpen(false)}
+          onCancel={handleModalCancel}
+          isEditMode={isEditMode}
+          initialData={initialData}
         />
       )}
     </Modal>

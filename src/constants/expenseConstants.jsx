@@ -78,12 +78,22 @@ export const COLORS = {
 };
 
 export const CATEGORIES = [
-  { name: 'Food', icon: 'Utensils', color: COLORS.red },
-  { name: 'Transport', icon: 'Bus', color: COLORS.blue },
-  { name: 'Groceries', icon: 'Apple', color: COLORS.green },
-  { name: 'Sport', icon: 'Dumbbell', color: COLORS.orange },
-  { name: 'Shopping', icon: 'ShoppingBag', color: COLORS.purple },
-  { name: 'Bills', icon: 'Wallet', color: COLORS.yellow },
-  { name: 'Cafe', icon: 'Coffee', color: COLORS.teal },
-  { name: 'Entertainment', icon: 'Gamepad', color: COLORS.pink },
+  { name: 'Food', type: 'Expenses', icon: 'Utensils', color: COLORS.red },
+  { name: 'Transport', type: 'Expenses', icon: 'Bus', color: COLORS.blue },
+  { name: 'Groceries', type: 'Expenses', icon: 'Apple', color: COLORS.green },
+  { name: 'Sport', type: 'Expenses', icon: 'Dumbbell', color: COLORS.orange },
+  {
+    name: 'Shopping',
+    type: 'Expenses',
+    icon: 'ShoppingBag',
+    color: COLORS.purple,
+  },
+  { name: 'Bills', type: 'Expenses', icon: 'Wallet', color: COLORS.yellow },
+  { name: 'Cafe', type: 'Expenses', icon: 'Coffee', color: COLORS.teal },
+  {
+    name: 'Entertainment',
+    type: 'Expenses',
+    icon: 'Gamepad',
+    color: COLORS.pink,
+  },
 ];

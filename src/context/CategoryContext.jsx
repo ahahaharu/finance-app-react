@@ -13,6 +13,7 @@ export function CategoriesProvider({ children }) {
       const defaultCategories = CATEGORIES.map((cat) =>
         createCategory({
           name: cat.name,
+          type: cat.type,
           icon: cat.icon,
           color: cat.color,
         })
@@ -31,6 +32,14 @@ export function CategoriesProvider({ children }) {
     setCategories((prev) => [...prev, newCategory]);
   };
 
+  const editCategory = (id, newData) => {
+    setCategories((prev) =>
+      prev.map((category) =>
+        category.id === id ? { ...category, ...newData } : category
+      )
+    );
+  };
+
   const removeCategory = (id) => {
     setCategories((prev) => prev.filter((category) => category.id !== id));
   };
@@ -38,6 +47,7 @@ export function CategoriesProvider({ children }) {
   const value = {
     categories,
     addCategory,
+    editCategory,
     removeCategory,
   };
 

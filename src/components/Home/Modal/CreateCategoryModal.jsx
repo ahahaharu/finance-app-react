@@ -11,7 +11,13 @@ const options = [
   { label: 'Income', value: 'Income' },
 ];
 
-export default function CreateCategoryModal({ title, isOpen, onCancel }) {
+export default function CreateCategoryModal({
+  title,
+  isOpen,
+  onCancel,
+  isEditMode = false,
+  initialData = null,
+}) {
   const [form] = Form.useForm();
   const [selectedIcon, setSelectedIcon] = useState('Utensils');
   const [moreIconsModalOpen, setMoreIconsModalOpen] = useState(false);
@@ -19,7 +25,7 @@ export default function CreateCategoryModal({ title, isOpen, onCancel }) {
   const [selectedColor, setSelectedColor] = useState({ hex: COLORS.red });
   const [pickerOpened, setPickerOpened] = useState(false);
   const [isColorPickerColor, setIsColorPickerColor] = useState(false);
-  const { addCategory } = useCategories();
+  const { addCategory, editCategory } = useCategories();
 
   function isAnotherIcon() {
     if (!anotherIconSelected) {
@@ -41,25 +47,32 @@ export default function CreateCategoryModal({ title, isOpen, onCancel }) {
   }, [anotherIconSelected]);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && isEditMode) {
       form.resetFields();
       form.setFieldsValue({
-        categoryName: '',
-        type: 'Expenses',
-        icon: 'Utensils',
-        color: 'red',
+        categoryName: initialData.name,
+        type: initialData.type,
+        icon: initialData.icon,
+        color: initialData.color,
       });
-      setSelectedIcon('Utensils');
-      setSelectedColor({ hex: COLORS.red });
+      setSelectedIcon(initialData.icon);
+      setSelectedColor({ hex: COLORS[initialData.color] });
     }
   }, [isOpen]);
+
   function handleSubmit(values) {
     console.log('Form values:', values);
-    addCategory({
+    const newCategory = {
       name: values.categoryName,
+      type: values.type,
       icon: values.icon,
       color: values.color,
-    });
+    };
+    if (isEditMode) {
+      editCategory(initialData.id, newCategory);
+    } else {
+      addCategory(newCategory);
+    }
     onCancel();
   }
 
@@ -106,7 +119,6 @@ export default function CreateCategoryModal({ title, isOpen, onCancel }) {
         onFinish={handleSubmit}
         onFinishFailed={onFinishFailed}
         initialValues={{
-          // Инициализация дефолтных значений на уровне Form
           type: 'Expenses',
           icon: 'Utensils',
           color: 'red',
@@ -230,7 +242,7 @@ export default function CreateCategoryModal({ title, isOpen, onCancel }) {
               Cancel
             </Button>
             <Button type="primary" htmlType="submit" onSubmit={handleSubmit}>
-              Add category
+              {isEditMode ? 'Edit Category' : 'Add Category'}
             </Button>
           </div>
         </Form.Item>
