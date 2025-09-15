@@ -208,6 +208,7 @@ export default function CreateCategoryModal({ title, isOpen, onCancel }) {
             </div>
             {pickerOpened && (
               <div className="fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-2 rounded shadow-lg">
+                // TODO: зарефакторить колор пикер, чтобы был более удобным
                 <ChromePicker
                   color={selectedColor.hex}
                   onChange={handleColorChange}

@@ -1,20 +1,43 @@
-import { Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import React, { useState } from 'react';
 import CategoryItem from '../Category/CategoryItem';
 import { CATEGORIES } from '../../../constants/expenseConstants';
-import { Plus } from 'lucide-react';
+import { MousePointer2, Pencil, Plus, Trash } from 'lucide-react';
 import CreateCategoryModal from './CreateCategoryModal';
 import { useCategories } from '../../../context/CategoryContext';
 
+// TODO: добавить редактирование категорий
+
 export default function MoreCategoriesModal({ title, isOpen, onCancel }) {
   const [createCategoryModalOpen, setCreateCategoryModalOpen] = useState(false);
-  const { categories } = useCategories();
+  const [selectedCategory, setSelectedCategory] = useState();
+  const { categories, removeCategory } = useCategories();
+
+  function handleDeleteCategory() {
+    const category = categories.find(
+      (category) => category.name === selectedCategory
+    );
+
+    removeCategory(category.id);
+    setSelectedCategory('');
+  }
 
   return (
-    <Modal title={title} open={isOpen} onCancel={onCancel} onOk={onCancel}>
+    <Modal
+      title={title}
+      open={isOpen}
+      onCancel={onCancel}
+      onOk={onCancel}
+      footer={null}
+    >
       <div className="flex flex-wrap gap-3 justify-start">
         {categories.map((category) => (
-          <CategoryItem key={category.name} category={category} />
+          <CategoryItem
+            key={category.name}
+            category={category}
+            isSelected={selectedCategory === category.name}
+            onClick={() => setSelectedCategory(category.name)}
+          />
         ))}
         <button
           type="button"
@@ -27,6 +50,32 @@ export default function MoreCategoriesModal({ title, isOpen, onCancel }) {
             Create
           </span>
         </button>
+      </div>
+      <div className="mt-3 flex justify-end gap-3">
+        <Button onClick={onCancel}>Cancel</Button>
+        {selectedCategory ? (
+          <>
+            <Button
+              onClick={handleDeleteCategory}
+              danger
+              icon={<Trash size={15} />}
+            >
+              Delete
+            </Button>
+            <Button onClick={onCancel} icon={<Pencil size={15} />}>
+              Edit
+            </Button>
+            <Button
+              type="primary"
+              onClick={onCancel}
+              icon={<MousePointer2 size={15} />}
+            >
+              Select
+            </Button>
+          </>
+        ) : (
+          ''
+        )}
       </div>
 
       {createCategoryModalOpen && (
