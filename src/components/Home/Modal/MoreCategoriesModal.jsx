@@ -1,10 +1,10 @@
 import { Button, Modal } from 'antd';
 import React, { useState } from 'react';
 import CategoryItem from '../Category/CategoryItem';
-import { CATEGORIES } from '../../../constants/expenseConstants';
-import { MousePointer2, Pencil, Plus, Trash } from 'lucide-react';
+import { CircleAlert, MousePointer2, Pencil, Plus, Trash } from 'lucide-react';
 import CreateCategoryModal from './CreateCategoryModal';
 import { useCategories } from '../../../context/CategoryContext';
+import ConfirmModal from '../../ConfirmModal/ConfirmModal';
 
 // TODO: добавить редактирование категорий
 
@@ -13,6 +13,7 @@ export default function MoreCategoriesModal({ title, isOpen, onCancel }) {
   const [selectedCategory, setSelectedCategory] = useState();
   const [isEditMode, setIsEditMode] = useState(false);
   const [initialData, setInitialData] = useState(null);
+  const [confirmDeleteModalOpen, setConfirmDeleteModalOpen] = useState(false);
   const { categories, removeCategory } = useCategories();
 
   function handleDeleteCategory() {
@@ -22,6 +23,11 @@ export default function MoreCategoriesModal({ title, isOpen, onCancel }) {
 
     removeCategory(category.id);
     setSelectedCategory('');
+  }
+
+  function handleConfirmDelete() {
+    handleDeleteCategory();
+    setConfirmDeleteModalOpen(false);
   }
 
   function handleModalCancel() {
@@ -74,7 +80,7 @@ export default function MoreCategoriesModal({ title, isOpen, onCancel }) {
         {selectedCategory ? (
           <>
             <Button
-              onClick={handleDeleteCategory}
+              onClick={() => setConfirmDeleteModalOpen(true)}
               danger
               icon={<Trash size={15} />}
             >
@@ -103,6 +109,16 @@ export default function MoreCategoriesModal({ title, isOpen, onCancel }) {
           onCancel={handleModalCancel}
           isEditMode={isEditMode}
           initialData={initialData}
+        />
+      )}
+
+      {confirmDeleteModalOpen && (
+        <ConfirmModal
+          title={'Are you sure you want to delete this Сategory?'}
+          content={'This action cannot be undone.'}
+          isOpen={confirmDeleteModalOpen}
+          onOk={handleConfirmDelete}
+          onCancel={() => setConfirmDeleteModalOpen(false)}
         />
       )}
     </Modal>
