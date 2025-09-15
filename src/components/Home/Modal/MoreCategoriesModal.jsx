@@ -6,8 +6,6 @@ import CreateCategoryModal from './CreateCategoryModal';
 import { useCategories } from '../../../context/CategoryContext';
 import ConfirmModal from '../../ConfirmModal/ConfirmModal';
 
-// TODO: добавить редактирование категорий
-
 export default function MoreCategoriesModal({ title, isOpen, onCancel }) {
   const [createCategoryModalOpen, setCreateCategoryModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState();

@@ -219,19 +219,19 @@ export default function CreateCategoryModal({
               <Plus size={12} />
             </div>
             {pickerOpened && (
-              <div className="fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-2 rounded shadow-lg">
-                // TODO: зарефакторить колор пикер, чтобы был более удобным
+              <div className="fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-2 rounded-lg shadow-xl border-2 border-blue-500">
                 <ChromePicker
                   color={selectedColor.hex}
                   onChange={handleColorChange}
                   onChangeComplete={handleColorChangeComplete}
                 />
-                <button
+                <Button
+                  type="primary"
+                  className="w-full mt-2"
                   onClick={() => setPickerOpened(false)}
-                  className="mt-2 px-4 py-1 bg-gray-200 rounded hover:bg-gray-300"
                 >
-                  Close
-                </button>
+                  Select color
+                </Button>
               </div>
             )}
           </div>
