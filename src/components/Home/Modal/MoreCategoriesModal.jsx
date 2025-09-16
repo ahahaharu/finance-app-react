@@ -6,13 +6,23 @@ import CreateCategoryModal from './CreateCategoryModal';
 import { useCategories } from '../../../context/CategoryContext';
 import ConfirmModal from '../../ConfirmModal/ConfirmModal';
 
-export default function MoreCategoriesModal({ title, isOpen, onCancel }) {
+export default function MoreCategoriesModal({
+  title,
+  isOpen,
+  onCancel,
+  selectCategory,
+}) {
   const [createCategoryModalOpen, setCreateCategoryModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState();
   const [isEditMode, setIsEditMode] = useState(false);
   const [initialData, setInitialData] = useState(null);
   const [confirmDeleteModalOpen, setConfirmDeleteModalOpen] = useState(false);
   const { categories, removeCategory } = useCategories();
+
+  function handleCategorySelect() {
+    selectCategory(selectedCategory);
+    onCancel();
+  }
 
   function handleDeleteCategory() {
     const category = categories.find(
@@ -89,7 +99,7 @@ export default function MoreCategoriesModal({ title, isOpen, onCancel }) {
             </Button>
             <Button
               type="primary"
-              onClick={onCancel}
+              onClick={handleCategorySelect}
               icon={<MousePointer2 size={15} />}
             >
               Select
