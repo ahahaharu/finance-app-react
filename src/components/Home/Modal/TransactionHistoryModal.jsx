@@ -38,20 +38,26 @@ export default function TransactionHistoryModal({ title, isOpen, onCancel }) {
   return (
     <Modal title={title} open={isOpen} onCancel={onCancel} onOk={onCancel}>
       <div>
-        {Object.entries(groupedExpenses).map(([date, transactions]) => (
-          <div key={date} className="mb-4">
-            <h2 className="font-bold mb-1">{date}</h2>
-            <div className="flex flex-col gap-2">
-              {transactions.map((transaction) => (
-                <TransactionCard
-                  key={transaction.id}
-                  transaction={transaction}
-                  onClick={() => setSelectedTransactionId(transaction.id)}
-                />
-              ))}
+        {expenses.length ? (
+          Object.entries(groupedExpenses).map(([date, transactions]) => (
+            <div key={date} className="mb-4">
+              <h2 className="font-bold mb-1">{date}</h2>
+              <div className="flex flex-col gap-2">
+                {transactions.map((transaction) => (
+                  <TransactionCard
+                    key={transaction.id}
+                    transaction={transaction}
+                    onClick={() => setSelectedTransactionId(transaction.id)}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <h2 className="text-lg text-center text-blue-500 my-5">
+            There are no transactions for this period.
+          </h2>
+        )}
       </div>
 
       {selectedTransactionId && (
