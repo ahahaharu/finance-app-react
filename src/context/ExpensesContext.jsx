@@ -18,6 +18,14 @@ export function ExpensesProvider({ children }) {
     setExpenses((prev) => [...prev, newExpense]);
   };
 
+  const editExpense = (id, newData) => {
+    setExpenses((prev) =>
+      prev.map((expense) =>
+        expense.id === id ? { ...expense, ...newData } : expense
+      )
+    );
+  };
+
   const removeExpense = (id) => {
     setExpenses((prev) => prev.filter((expense) => expense.id !== id));
   };
@@ -33,6 +41,7 @@ export function ExpensesProvider({ children }) {
   const value = {
     expenses,
     addExpense,
+    editExpense,
     removeExpense,
     getExpensesByCategory,
   };

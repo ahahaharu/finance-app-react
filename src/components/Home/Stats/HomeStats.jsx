@@ -8,7 +8,7 @@ import AdditionalModal from '../Modal/AdditionalModal';
 import TransactionHistoryModal from '../Modal/TransactionHistoryModal';
 
 export default function HomeStats() {
-  const [additionModalOpen, setAdditionalModalOpen] = useState(false);
+  const [additionalModalOpen, setAdditionalModalOpen] = useState(false);
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
 
   function handleAdditionalModalOpen() {
@@ -32,10 +32,10 @@ export default function HomeStats() {
         </Button>
       </div>
 
-      {additionModalOpen && (
+      {additionalModalOpen && (
         <AdditionalModal
           title="Add Transaction"
-          isOpen={additionModalOpen}
+          isOpen={additionalModalOpen}
           onCancel={() => setAdditionalModalOpen(false)}
         />
       )}

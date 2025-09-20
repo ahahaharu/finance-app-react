@@ -14,14 +14,36 @@ import CategoryItem from '../Category/CategoryItem';
 import MoreCategoriesModal from './MoreCategoriesModal';
 import { useCategories } from '../../../context/CategoryContext';
 import { useExpenses } from '../../../context/ExpensesContext';
+import dayjs from 'dayjs';
 
-export default function AdditionalModal({ title, isOpen, onCancel }) {
+export default function AdditionalModal({
+  title,
+  isOpen,
+  onCancel,
+  isEditMode = false,
+  initialData = null,
+}) {
   const [form] = Form.useForm();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [moreCategoriesModalOpen, setMoreCategoriesModalOpen] = useState(false);
   const [anotherCategorySelected, setAnotherCategorySelected] = useState(false);
   const { categories } = useCategories();
-  const { addExpense } = useExpenses();
+  const { addExpense, editExpense } = useExpenses();
+
+  useEffect(() => {
+    if (isOpen && isEditMode) {
+      form.resetFields();
+      form.setFieldsValue({
+        amount: initialData.amount,
+        currency: initialData.currency,
+        account: initialData.account,
+        category: initialData.category,
+        date: dayjs(initialData.date),
+        comment: initialData.comment,
+      });
+      setSelectedCategory(initialData.category);
+    }
+  }, [isOpen]);
 
   function isAnotherCategory() {
     if (!anotherCategorySelected) {
@@ -57,12 +79,17 @@ export default function AdditionalModal({ title, isOpen, onCancel }) {
     const newTransaction = {
       amount: values.amount,
       currency: values.currency,
-      date: values.date,
+      date: values.date.toISOString(),
       account: values.account,
       category: values.category,
       comment: values.comment,
     };
-    addExpense(newTransaction);
+    if (isEditMode) {
+      editExpense(initialData.id, newTransaction);
+    } else {
+      addExpense(newTransaction);
+    }
+
     onCancel();
   };
 
