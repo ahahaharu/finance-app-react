@@ -13,8 +13,8 @@ export function ExpensesProvider({ children }) {
     localStorage.setItem('expenses', JSON.stringify(expenses));
   }, [expenses]);
 
-  const addExpense = (expenceDate) => {
-    const newExpense = createExpense(expenceDate);
+  const addExpense = (expenceData) => {
+    const newExpense = createExpense(expenceData);
     setExpenses((prev) => [...prev, newExpense]);
   };
 
@@ -22,10 +22,19 @@ export function ExpensesProvider({ children }) {
     setExpenses((prev) => prev.filter((expense) => expense.id !== id));
   };
 
+  const getExpensesByCategory = () => {
+    return expenses.reduce((acc, expence) => {
+      const { category, amount } = expence;
+      acc[category] = (acc[category] || 0) + amount;
+      return acc;
+    }, {});
+  };
+
   const value = {
     expenses,
     addExpense,
     removeExpense,
+    getExpensesByCategory,
   };
 
   return (

@@ -53,7 +53,16 @@ export default function AdditionalModal({ title, isOpen, onCancel }) {
   }, [anotherCategorySelected]);
 
   const handleSubmit = (values) => {
-    console.log('Form values:', values);
+    console.log(values);
+    const newTransaction = {
+      amount: values.amount,
+      currency: values.currency,
+      date: values.date,
+      account: values.account,
+      category: values.category,
+      comment: values.comment,
+    };
+    addExpense(newTransaction);
     onCancel();
   };
 
@@ -95,9 +104,9 @@ export default function AdditionalModal({ title, isOpen, onCancel }) {
               style={{ marginBottom: 0 }}
             >
               <Select placeholder="Сurrency" style={{ width: 120 }}>
-                <Select.Option value="usd">USD</Select.Option>
-                <Select.Option value="eur">EUR</Select.Option>
-                <Select.Option value="byn">BYN</Select.Option>
+                <Select.Option value="USD">USD</Select.Option>
+                <Select.Option value="EUR">EUR</Select.Option>
+                <Select.Option value="BYN">BYN</Select.Option>
               </Select>
             </Form.Item>
           </Space.Compact>
@@ -110,8 +119,8 @@ export default function AdditionalModal({ title, isOpen, onCancel }) {
           style={{ marginBottom: '20px' }}
         >
           <Select placeholder="Account" style={{ width: 120 }}>
-            <Select.Option value="cash">Cash</Select.Option>
-            <Select.Option value="card">Card</Select.Option>
+            <Select.Option value="Cash">Cash</Select.Option>
+            <Select.Option value="Card">Card</Select.Option>
           </Select>
         </Form.Item>
 
@@ -166,7 +175,7 @@ export default function AdditionalModal({ title, isOpen, onCancel }) {
             <Button key="cancel" onClick={onCancel}>
               Cancel
             </Button>
-            <Button type="primary" htmlType="submit" onClick={handleSubmit}>
+            <Button type="primary" htmlType="submit">
               Add Transaction
             </Button>
           </div>

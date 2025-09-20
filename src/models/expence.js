@@ -2,13 +2,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const DEFAULT_EXPENSE = {
   id: null,
-  description: '',
   amount: 0,
+  currency: '',
   date: new Date(),
   category: '',
   account: '',
-  iconName: '',
-  color: '',
+  comment: '',
 };
 
 export function createExpense(data) {

@@ -44,11 +44,16 @@ export function CategoriesProvider({ children }) {
     setCategories((prev) => prev.filter((category) => category.id !== id));
   };
 
+  const getCategoryByName = (categoryName) => {
+    return categories.find((category) => category.name === categoryName);
+  };
+
   const value = {
     categories,
     addCategory,
     editCategory,
     removeCategory,
+    getCategoryByName,
   };
 
   return (

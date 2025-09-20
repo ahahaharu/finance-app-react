@@ -5,9 +5,11 @@ import Button from '../../UI/Button';
 import { ClipboardClock, Plus } from 'lucide-react';
 import Chart from './Chart';
 import AdditionalModal from '../Modal/AdditionalModal';
+import TransactionHistoryModal from '../Modal/TransactionHistoryModal';
 
 export default function HomeStats() {
   const [additionModalOpen, setAdditionalModalOpen] = useState(false);
+  const [historyModalOpen, setHistoryModalOpen] = useState(false);
 
   function handleAdditionalModalOpen() {
     setAdditionalModalOpen(true);
@@ -22,7 +24,12 @@ export default function HomeStats() {
         <Button icon={<Plus />} onClick={handleAdditionalModalOpen} primary>
           Add Expenses
         </Button>
-        <Button icon={<ClipboardClock />}>History</Button>
+        <Button
+          icon={<ClipboardClock />}
+          onClick={() => setHistoryModalOpen(true)}
+        >
+          History
+        </Button>
       </div>
 
       {additionModalOpen && (
@@ -30,6 +37,14 @@ export default function HomeStats() {
           title="Add Transaction"
           isOpen={additionModalOpen}
           onCancel={() => setAdditionalModalOpen(false)}
+        />
+      )}
+
+      {historyModalOpen && (
+        <TransactionHistoryModal
+          title="Transactions History"
+          isOpen={historyModalOpen}
+          onCancel={() => setHistoryModalOpen(false)}
         />
       )}
     </div>
