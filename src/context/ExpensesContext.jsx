@@ -1,5 +1,6 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { createExpense } from '../models/expence';
+import { useCategories } from './CategoryContext';
 
 const ExpensesContext = createContext();
 
@@ -8,6 +9,7 @@ export function ExpensesProvider({ children }) {
     const savedExpenses = localStorage.getItem('expenses');
     return savedExpenses ? JSON.parse(savedExpenses) : [];
   });
+  const { categories } = useCategories();
 
   useEffect(() => {
     localStorage.setItem('expenses', JSON.stringify(expenses));
@@ -32,11 +34,27 @@ export function ExpensesProvider({ children }) {
 
   const getExpensesByCategory = () => {
     return expenses.reduce((acc, expence) => {
-      const { category, amount } = expence;
-      acc[category] = (acc[category] || 0) + amount;
+      const { category, amount, currency } = expence;
+      acc[category] = {
+        amount: (acc[category]?.amount || 0) + amount,
+        currency,
+      };
       return acc;
     }, {});
   };
+
+  const categoriesWithAmount = useMemo(() => {
+    const categoriesExpenses = getExpensesByCategory();
+    console.log(categoriesExpenses);
+    const cardsInfo = Object.entries(categoriesExpenses).map(
+      ([categoryName, value]) => {
+        const category = categories.find((cat) => cat.name == categoryName);
+        console.log(categoryName);
+        return { ...category, amount: value.amount, currency: value.currency };
+      }
+    );
+    return cardsInfo;
+  }, [expenses]);
 
   const value = {
     expenses,
@@ -44,6 +62,7 @@ export function ExpensesProvider({ children }) {
     editExpense,
     removeExpense,
     getExpensesByCategory,
+    categoriesWithAmount,
   };
 
   return (

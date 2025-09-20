@@ -3,12 +3,12 @@ import { PieChart } from '@mui/x-charts/PieChart';
 import { useExpenses } from '../../../context/ExpensesContext';
 
 export default function Chart() {
-  const { expenses } = useExpenses();
+  const { expenses, categoriesWithAmount } = useExpenses();
 
-  const data = expenses.map((expense) => ({
-    label: expense.category,
-    value: parseFloat(expense.amount),
-    color: expense.color,
+  const data = categoriesWithAmount.map((category) => ({
+    label: category.name,
+    value: parseFloat(category.amount),
+    color: category.color,
   }));
   return (
     <PieChart
