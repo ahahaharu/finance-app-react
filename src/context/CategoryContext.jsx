@@ -44,8 +44,8 @@ export function CategoriesProvider({ children }) {
     setCategories((prev) => prev.filter((category) => category.id !== id));
   };
 
-  const getCategoryByName = (categoryName) => {
-    return categories.find((category) => category.name === categoryName);
+  const getCategoryById = (categoryId) => {
+    return categories.find((category) => category.id === categoryId);
   };
 
   const value = {
@@ -53,7 +53,7 @@ export function CategoriesProvider({ children }) {
     addCategory,
     editCategory,
     removeCategory,
-    getCategoryByName,
+    getCategoryById,
   };
 
   return (

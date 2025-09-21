@@ -65,10 +65,10 @@ export default function MoreCategoriesModal({
       <div className="flex flex-wrap gap-3 justify-start">
         {categories.map((category) => (
           <CategoryItem
-            key={category.name}
+            key={category.id}
             category={category}
-            isSelected={selectedCategory === category.name}
-            onClick={() => setSelectedCategory(category.name)}
+            isSelected={selectedCategory === category.id}
+            onClick={() => setSelectedCategory(category.id)}
           />
         ))}
         <button

@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { createExpense } from '../models/expence';
 import { useCategories } from './CategoryContext';
+import { private_createTypography } from '@mui/material/styles';
 
 const ExpensesContext = createContext();
 
@@ -45,11 +46,9 @@ export function ExpensesProvider({ children }) {
 
   const categoriesWithAmount = useMemo(() => {
     const categoriesExpenses = getExpensesByCategory();
-    console.log(categoriesExpenses);
     const cardsInfo = Object.entries(categoriesExpenses).map(
-      ([categoryName, value]) => {
-        const category = categories.find((cat) => cat.name == categoryName);
-        console.log(categoryName);
+      ([categoryId, value]) => {
+        const category = categories.find((cat) => cat.id === categoryId);
         return { ...category, amount: value.amount, currency: value.currency };
       }
     );

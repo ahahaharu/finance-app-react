@@ -5,8 +5,8 @@ import TransactionInfoModal from '../Modal/TransactionInfoModal';
 
 export default function TransactionCard({ transaction, onClick }) {
   const { category, amount, currency } = transaction;
-  const { getCategoryByName } = useCategories();
-  const categoryObject = getCategoryByName(category);
+  const { getCategoryById } = useCategories();
+  const categoryObject = getCategoryById(category);
 
   return (
     <div

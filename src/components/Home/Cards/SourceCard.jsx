@@ -7,10 +7,14 @@ export default function SourceCard({
   color,
   amount,
   currency,
+  onClick,
 }) {
   const styleColor = color;
   return (
-    <div className="flex justify-between items-center border-[#1677ff] border-2 p-3 rounded-2xl shadow-md">
+    <div
+      className="flex justify-between items-center border-[#1677ff] border-2 p-3 rounded-2xl shadow-md hover:bg-sky-50 cursor-pointer"
+      onClick={onClick}
+    >
       <div
         style={{ color: styleColor }}
         className={`flex gap-3  items-center `}

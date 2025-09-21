@@ -16,9 +16,9 @@ export default function TransactionInfoModal({
   const [isEditMode, setIsEditMode] = useState(false);
   const [initialData, setInitialData] = useState(null);
   const [additionalModalOpen, setAdditionalModalOpen] = useState(false);
-  const { getCategoryByName } = useCategories();
+  const { getCategoryById } = useCategories();
   const { removeExpense } = useExpenses();
-  const categoryObject = getCategoryByName(category);
+  const categoryObject = getCategoryById(category);
 
   const getDate = () => {
     return new Date(date).toLocaleDateString('en-US', {

@@ -51,7 +51,7 @@ export default function AdditionalModal({
     }
 
     const category = categories.find(
-      (category) => category.name === anotherCategorySelected
+      (category) => category.id === anotherCategorySelected
     );
     if (categories.slice(0, 7).includes(category)) {
       return null;
@@ -59,9 +59,9 @@ export default function AdditionalModal({
 
     return (
       <CategoryItem
-        key={category.name}
+        key={category.id}
         category={category}
-        isSelected={selectedCategory === category.name}
+        isSelected={selectedCategory === category.id}
         onClick={() => handleCategoryClick(anotherCategorySelected)}
       />
     );
@@ -93,9 +93,9 @@ export default function AdditionalModal({
     onCancel();
   };
 
-  const handleCategoryClick = (categoryName) => {
-    setSelectedCategory(categoryName);
-    form.setFieldsValue({ category: categoryName });
+  const handleCategoryClick = (categoryId) => {
+    setSelectedCategory(categoryId);
+    form.setFieldsValue({ category: categoryId });
   };
 
   const sliceEnd = isAnotherCategory() ? 6 : 7;
@@ -162,8 +162,8 @@ export default function AdditionalModal({
               <CategoryItem
                 key={category.name}
                 category={category}
-                isSelected={selectedCategory === category.name}
-                onClick={() => handleCategoryClick(category.name)}
+                isSelected={selectedCategory === category.id}
+                onClick={() => handleCategoryClick(category.id)}
               />
             ))}
             <button
