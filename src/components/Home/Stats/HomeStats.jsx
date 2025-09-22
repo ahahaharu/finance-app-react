@@ -7,7 +7,7 @@ import Chart from './Chart';
 import AdditionalModal from '../Modal/AdditionalModal';
 import TransactionHistoryModal from '../Modal/TransactionHistoryModal';
 
-export default function HomeStats() {
+export default function HomeStats({ periodFilter, togglePeriodFilter }) {
   const [additionalModalOpen, setAdditionalModalOpen] = useState(false);
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
 
@@ -17,7 +17,10 @@ export default function HomeStats() {
 
   return (
     <div className="w-full p-5 border-2 rounded-2xl shadow-lg flex flex-col items-center justify-center">
-      <HomeStatsPeriods />
+      <HomeStatsPeriods
+        periodFilter={periodFilter}
+        togglePeriodFilter={togglePeriodFilter}
+      />
       <HomeStatsChoosePeriod />
       <Chart />
       <div className="w-full flex justify-center gap-3">

@@ -10,16 +10,33 @@ export default function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    if (!searchParams.get('transaction')) {
-      setSearchParams({ ...searchParams, transaction: 'expense' });
+    const hasTransaction = searchParams.get('transaction');
+    const hasFilter = searchParams.get('filter');
+    if (!hasTransaction || !hasFilter) {
+      setSearchParams((prev) => ({
+        ...Object.fromEntries(prev),
+        transaction: 'expense',
+        filter: 'week',
+      }));
     }
   }, [searchParams, setSearchParams]);
 
   function toggleTransaction(transactionType) {
-    setSearchParams({ ...searchParams, transaction: transactionType });
+    setSearchParams((prev) => ({
+      ...Object.fromEntries(prev),
+      transaction: transactionType,
+    }));
   }
 
-  const transactionType = searchParams.get('transaction');
+  function togglePeriodFilter(periodFilter) {
+    setSearchParams((prev) => ({
+      ...Object.fromEntries(prev),
+      filter: periodFilter,
+    }));
+  }
+
+  const transactionType = searchParams.get('transaction') || 'expense';
+  const periodFilter = searchParams.get('filter') || 'week';
 
   return (
     <Wrapper>
@@ -28,7 +45,10 @@ export default function HomePage() {
         transactionType={transactionType}
         toggleTransaction={toggleTransaction}
       />
-      <HomeStats />
+      <HomeStats
+        periodFilter={periodFilter}
+        togglePeriodFilter={togglePeriodFilter}
+      />
       <SourceCards />
     </Wrapper>
   );

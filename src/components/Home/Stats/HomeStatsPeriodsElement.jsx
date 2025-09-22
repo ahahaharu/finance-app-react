@@ -1,11 +1,16 @@
 import React from 'react';
 
-export default function HomeStatsPeriodsElement({ children, active }) {
+export default function HomeStatsPeriodsElement({
+  children,
+  isActive,
+  onClick,
+}) {
   return (
     <div
       className={`py-1 px-3 rounded-md cursor-pointer ${
-        active ? 'bg-[#1677ff] text-white' : 'hover:bg-sky-100 '
+        isActive ? 'bg-[#1677ff] text-white' : 'hover:bg-sky-100 '
       }`}
+      onClick={onClick}
     >
       {children}
     </div>
