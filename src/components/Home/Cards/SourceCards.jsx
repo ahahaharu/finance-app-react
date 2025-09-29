@@ -4,13 +4,25 @@ import { useExpenses } from '../../../context/ExpensesContext';
 import { Modal } from 'antd';
 import CategoryHistoryModal from '../Modal/CategoryHistoryModal';
 
-export default function SourceCards() {
-  const { categoriesWithAmount } = useExpenses();
+export default function SourceCards({
+  periodFilter,
+  offset,
+  startDate,
+  endDate,
+}) {
+  const { getFilteredCategoriesWithAmount } = useExpenses();
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+
+  const filteredCategories = getFilteredCategoriesWithAmount(
+    periodFilter,
+    offset,
+    periodFilter === 'period' && startDate && endDate ? startDate : null,
+    periodFilter === 'period' && startDate && endDate ? endDate : null
+  );
 
   return (
     <div className="flex flex-col gap-2 my-5">
-      {categoriesWithAmount.map((category) => (
+      {filteredCategories.map((category) => (
         <SourceCard
           key={category.id}
           icon={category.icon}

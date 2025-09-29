@@ -17,10 +17,10 @@ export default function HomeStatsPeriods({ periodFilter, togglePeriodFilter }) {
         Week
       </HomeStatsPeriodsElement>
       <HomeStatsPeriodsElement
-        isActive={periodFilter === 'mounth'}
-        onClick={() => togglePeriodFilter('mounth')}
+        isActive={periodFilter === 'month'}
+        onClick={() => togglePeriodFilter('month')}
       >
-        Mounth
+        Month
       </HomeStatsPeriodsElement>
       <HomeStatsPeriodsElement
         isActive={periodFilter === 'year'}

@@ -2,14 +2,22 @@ import React from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { useExpenses } from '../../../context/ExpensesContext';
 
-export default function Chart() {
-  const { expenses, categoriesWithAmount } = useExpenses();
+export default function Chart({ periodFilter, offset, startDate, endDate }) {
+  const { getFilteredCategoriesWithAmount } = useExpenses();
 
-  const data = categoriesWithAmount.map((category) => ({
+  const filteredCategories = getFilteredCategoriesWithAmount(
+    periodFilter,
+    offset,
+    periodFilter === 'period' && startDate && endDate ? startDate : null,
+    periodFilter === 'period' && startDate && endDate ? endDate : null
+  );
+
+  const data = filteredCategories.map((category) => ({
     label: category.name,
-    value: parseFloat(category.amount),
+    value: parseFloat(category.amount) || 0,
     color: category.color,
   }));
+
   return (
     <PieChart
       className="cursor-pointer"
