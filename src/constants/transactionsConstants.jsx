@@ -67,7 +67,6 @@ export const TRANSACTION_ICONS = {
   Calendar: <Calendar size={30} />,
   Clock: <Clock size={30} />,
   Payment: <HandCoins size={30} />,
-  Banknote: <Banknote size={30} />,
   Bank: <Landmark size={30} />,
 };
 

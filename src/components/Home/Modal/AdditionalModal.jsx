@@ -44,6 +44,7 @@ export default function AdditionalModal({
   useEffect(() => {
     if (isOpen && isEditMode) {
       form.resetFields();
+      setTransactionType(initialData.type);
       form.setFieldsValue({
         amount: initialData.amount,
         currency: initialData.currency,
@@ -55,6 +56,10 @@ export default function AdditionalModal({
       setSelectedCategory(initialData.category);
     }
   }, [isOpen]);
+
+  const getActiveTabKey = () => {
+    return items.find((item) => item.label === transactionType)?.key || '1';
+  };
 
   const onChange = (key) => {
     setTransactionType(items.find((item) => item.key === key).label);
@@ -89,7 +94,7 @@ export default function AdditionalModal({
       footer={null}
     >
       <div className="flex flex-col items-center">
-        <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+        <Tabs activeKey={getActiveTabKey()} items={items} onChange={onChange} />
         <TransactionForm
           transactionType={transactionType}
           form={form}
