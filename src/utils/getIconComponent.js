@@ -1,7 +1,7 @@
-import { EXPENSE_ICONS } from '../constants/expenseConstants';
+import { TRANSACTION_ICONS } from '../constants/transactionsConstants';
 
 const getIconComponent = (iconName) => {
-  return EXPENSE_ICONS[iconName];
+  return TRANSACTION_ICONS[iconName];
 };
 
 export default getIconComponent;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { EXPENSE_ICONS } from '../../../constants/expenseConstants';
+import { TRANSACTION_ICONS } from '../../../constants/transactionsConstants';
 
 export default function CategoryItem({ category, isSelected, onClick }) {
   return (
@@ -12,7 +12,7 @@ export default function CategoryItem({ category, isSelected, onClick }) {
       style={{ color: category.color }}
       onClick={onClick}
     >
-      {EXPENSE_ICONS[category.icon]}
+      {TRANSACTION_ICONS[category.icon]}
       <span
         className={`text-center mt-1 w-full whitespace-nowrap overflow-hidden text-ellipsis`}
       >

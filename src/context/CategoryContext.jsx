@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { createCategory } from '../models/category';
-import { CATEGORIES } from '../constants/expenseConstants';
+import { CATEGORIES } from '../constants/transactionsConstants';
 
 const CategoriesContext = createContext();
 

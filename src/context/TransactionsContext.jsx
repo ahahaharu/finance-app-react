@@ -1,42 +1,44 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { createExpense } from '../models/expence';
 import { useCategories } from './CategoryContext';
 import { useSearchParams } from 'react-router-dom';
+import { createTransaction } from '../models/transaction';
 
-const ExpensesContext = createContext();
+const TransactionsContext = createContext();
 
-export function ExpensesProvider({ children }) {
+export function TransactionsProvider({ children }) {
   const [searchParams] = useSearchParams();
-  const [expenses, setExpenses] = useState(() => {
-    const savedExpenses = localStorage.getItem('expenses');
-    return savedExpenses ? JSON.parse(savedExpenses) : [];
+  const [transactions, setTransactions] = useState(() => {
+    const savedTransactions = localStorage.getItem('transactions');
+    return savedTransactions ? JSON.parse(savedTransactions) : [];
   });
   const { categories } = useCategories();
 
   useEffect(() => {
-    localStorage.setItem('expenses', JSON.stringify(expenses));
-  }, [expenses]);
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+  }, [transactions]);
 
-  const addExpense = (expenceData) => {
-    const newExpense = createExpense(expenceData);
-    setExpenses((prev) => [...prev, newExpense]);
+  const addTransaction = (transactionData) => {
+    const newTransaction = createTransaction(transactionData);
+    setTransactions((prev) => [...prev, newTransaction]);
   };
 
-  const editExpense = (id, newData) => {
-    setExpenses((prev) =>
-      prev.map((expense) =>
-        expense.id === id ? { ...expense, ...newData } : expense
+  const editTransaction = (id, newData) => {
+    setTransactions((prev) =>
+      prev.map((transaction) =>
+        transaction.id === id ? { ...transaction, ...newData } : transaction
       )
     );
   };
 
-  const removeExpense = (id) => {
-    setExpenses((prev) => prev.filter((expense) => expense.id !== id));
+  const removeTransaction = (id) => {
+    setTransactions((prev) =>
+      prev.filter((transaction) => transaction.id !== id)
+    );
   };
 
-  const getExpensesByCategory = (filteredExpenses) => {
-    return (filteredExpenses || expenses).reduce((acc, expence) => {
-      const { category, amount, currency } = expence;
+  const getTransactionsByCategory = (filteredTransactions) => {
+    return (filteredTransactions || transactions).reduce((acc, transaction) => {
+      const { category, amount, currency } = transaction;
       acc[category] = {
         amount: (acc[category]?.amount || 0) + amount,
         currency,
@@ -45,13 +47,13 @@ export function ExpensesProvider({ children }) {
     }, {});
   };
 
-  const filterExpensesByPeriod = (
+  const filterTransactionsByPeriod = (
     periodFilter,
     offset = 0,
     startDate = null,
     endDate = null
   ) => {
-    const expensesToFilter = [...expenses];
+    const transactionsToFilter = [...transactions];
     const now = new Date();
 
     const effectiveStartDate = startDate
@@ -67,12 +69,12 @@ export function ExpensesProvider({ children }) {
 
     if (periodFilter === 'period' && effectiveStartDate && effectiveEndDate) {
       effectiveEndDate.setHours(23, 59, 59, 999);
-      return expensesToFilter.filter((expense) => {
-        const expenseDate = new Date(expense.date);
-        const expenseTime = expenseDate.getTime();
+      return transactionsToFilter.filter((transaction) => {
+        const transactionDate = new Date(transaction.date);
+        const transactionTime = transactionDate.getTime();
         return (
-          expenseTime >= effectiveStartDate.getTime() &&
-          expenseTime <= effectiveEndDate.getTime()
+          transactionTime >= effectiveStartDate.getTime() &&
+          transactionTime <= effectiveEndDate.getTime()
         );
       });
     }
@@ -92,12 +94,12 @@ export function ExpensesProvider({ children }) {
         baseDate.setFullYear(now.getFullYear() + offset);
         break;
       default:
-        return expensesToFilter;
+        return transactionsToFilter;
     }
 
-    return expensesToFilter.filter((expense) => {
-      const expenseDate = new Date(expense.date);
-      const expenseTime = expenseDate.getTime();
+    return transactionsToFilter.filter((transaction) => {
+      const transactionDate = new Date(transaction.date);
+      const transactionTime = transactionDate.getTime();
 
       switch (periodFilter) {
         case 'day':
@@ -106,8 +108,8 @@ export function ExpensesProvider({ children }) {
           const endOfDay = new Date(baseDate);
           endOfDay.setHours(23, 59, 59, 999);
           return (
-            expenseTime >= startOfDay.getTime() &&
-            expenseTime <= endOfDay.getTime()
+            transactionTime >= startOfDay.getTime() &&
+            transactionTime <= endOfDay.getTime()
           );
 
         case 'week':
@@ -117,8 +119,8 @@ export function ExpensesProvider({ children }) {
           const endOfWeek = new Date(baseDate);
           endOfWeek.setHours(23, 59, 59, 999);
           return (
-            expenseTime >= startOfWeek.getTime() &&
-            expenseTime <= endOfWeek.getTime()
+            transactionTime >= startOfWeek.getTime() &&
+            transactionTime <= endOfWeek.getTime()
           );
 
         case 'month':
@@ -128,8 +130,8 @@ export function ExpensesProvider({ children }) {
           const endOfMonth = new Date(year, month + 1, 0);
           endOfMonth.setHours(23, 59, 59, 999);
           return (
-            expenseTime >= startOfMonth.getTime() &&
-            expenseTime <= endOfMonth.getTime()
+            transactionTime >= startOfMonth.getTime() &&
+            transactionTime <= endOfMonth.getTime()
           );
 
         case 'year':
@@ -138,8 +140,8 @@ export function ExpensesProvider({ children }) {
           const endOfYear = new Date(currentYear, 11, 31);
           endOfYear.setHours(23, 59, 59, 999);
           return (
-            expenseTime >= startOfYear.getTime() &&
-            expenseTime <= endOfYear.getTime()
+            transactionTime >= startOfYear.getTime() &&
+            transactionTime <= endOfYear.getTime()
           );
 
         default:
@@ -154,14 +156,15 @@ export function ExpensesProvider({ children }) {
     startDate = null,
     endDate = null
   ) => {
-    const filteredExpenses = filterExpensesByPeriod(
+    const filteredTransactions = filterTransactionsByPeriod(
       periodFilter,
       offset,
       startDate,
       endDate
     );
-    const categoriesExpenses = getExpensesByCategory(filteredExpenses);
-    return Object.entries(categoriesExpenses)
+    const categoriesTransactions =
+      getTransactionsByCategory(filteredTransactions);
+    return Object.entries(categoriesTransactions)
       .map(([categoryId, value]) => {
         const category = categories.find((cat) => cat.id === categoryId);
         return { ...category, amount: value.amount, currency: value.currency };
@@ -170,25 +173,27 @@ export function ExpensesProvider({ children }) {
   };
 
   const value = {
-    expenses,
-    addExpense,
-    editExpense,
-    removeExpense,
-    getExpensesByCategory,
+    transactions,
+    addTransaction,
+    editTransaction,
+    removeTransaction,
+    getTransactionsByCategory,
     getFilteredCategoriesWithAmount,
   };
 
   return (
-    <ExpensesContext.Provider value={value}>
+    <TransactionsContext.Provider value={value}>
       {children}
-    </ExpensesContext.Provider>
+    </TransactionsContext.Provider>
   );
 }
 
-export function useExpenses() {
-  const context = useContext(ExpensesContext);
+export function useTransactions() {
+  const context = useContext(TransactionsContext);
   if (!context) {
-    throw new Error('useExpenses must be used within an ExpensesProvider');
+    throw new Error(
+      'usetransactions must be used within an transactionsProvider'
+    );
   }
   return context;
 }

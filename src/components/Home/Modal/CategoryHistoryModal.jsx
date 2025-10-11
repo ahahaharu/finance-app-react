@@ -1,8 +1,8 @@
 import { Modal } from 'antd';
 import React, { useMemo, useState } from 'react';
-import { useExpenses } from '../../../context/ExpensesContext';
 import TransactionCard from '../Transaction/TransactionCard';
 import TransactionInfoModal from './TransactionInfoModal';
+import { useTransactions } from '../../../context/TransactionsContext';
 
 export default function CategoryHistoryModal({
   title,
@@ -10,20 +10,20 @@ export default function CategoryHistoryModal({
   onCancel,
   categoryId,
 }) {
-  const { expenses } = useExpenses();
+  const { transactions } = useTransactions();
   const [selectedTransactionId, setSelectedTransactionId] = useState(null);
 
-  const groupedExpensesByCategory = useMemo(() => {
-    const expensesByCategory = expenses.filter(
-      (expense) => expense.category === categoryId
+  const groupedTransactionsByCategory = useMemo(() => {
+    const transactionsByCategory = transactions.filter(
+      (transaction) => transaction.category === categoryId
     );
 
-    const sortedExpenses = [...expensesByCategory].sort(
+    const sortedTransactions = [...transactionsByCategory].sort(
       (a, b) => new Date(b.date) - new Date(a.date)
     );
 
-    return sortedExpenses.reduce((acc, expense) => {
-      const date = new Date(expense.date).toLocaleDateString('en-US', {
+    return sortedTransactions.reduce((acc, transaction) => {
+      const date = new Date(transaction.date).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -31,20 +31,20 @@ export default function CategoryHistoryModal({
       if (!acc[date]) {
         acc[date] = [];
       }
-      acc[date].push(expense);
+      acc[date].push(transaction);
       return acc;
     }, {});
-  }, [expenses]);
+  }, [transactions]);
 
-  const selectedTransaction = expenses.find(
+  const selectedTransaction = transactions.find(
     (exp) => exp.id === selectedTransactionId
   );
 
   return (
     <Modal title={title} open={isOpen} onCancel={onCancel} onOk={onCancel}>
       <div>
-        {groupedExpensesByCategory ? (
-          Object.entries(groupedExpensesByCategory).map(
+        {groupedTransactionsByCategory ? (
+          Object.entries(groupedTransactionsByCategory).map(
             ([date, transactions]) => (
               <div key={date} className="mb-4">
                 <h2 className="font-bold mb-1">{date}</h2>

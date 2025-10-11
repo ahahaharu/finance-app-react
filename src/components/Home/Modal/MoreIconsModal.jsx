@@ -1,6 +1,6 @@
 import { Modal } from 'antd';
 import React, { useState } from 'react';
-import { EXPENSE_ICONS } from '../../../constants/expenseConstants';
+import { TRANSACTION_ICONS } from '../../../constants/transactionsConstants';
 
 export default function MoreIconsModal({ title, isOpen, onCancel, setIcon }) {
   const [selectedIcon, setSelectedIcon] = useState('');
@@ -17,7 +17,7 @@ export default function MoreIconsModal({ title, isOpen, onCancel, setIcon }) {
   return (
     <Modal title={title} open={isOpen} onCancel={onCancel} onOk={handleOk}>
       <div className="flex flex-wrap gap-3">
-        {Object.keys(EXPENSE_ICONS).map((iconName) => (
+        {Object.keys(TRANSACTION_ICONS).map((iconName) => (
           <div
             key={iconName}
             className={`p-2 rounded cursor-pointer hover:bg-sky-50 ${
@@ -27,7 +27,7 @@ export default function MoreIconsModal({ title, isOpen, onCancel, setIcon }) {
             }`}
             onClick={() => handleIconClick(iconName)}
           >
-            {EXPENSE_ICONS[iconName]}
+            {TRANSACTION_ICONS[iconName]}
           </div>
         ))}
       </div>

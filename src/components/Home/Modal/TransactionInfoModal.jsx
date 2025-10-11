@@ -2,9 +2,9 @@ import { Button, Modal } from 'antd';
 import React, { useState } from 'react';
 import { useCategories } from '../../../context/CategoryContext';
 import getIconComponent from '../../../utils/getIconComponent';
-import { useExpenses } from '../../../context/ExpensesContext';
 import { Pencil, Trash } from 'lucide-react';
 import AdditionalModal from './AdditionalModal';
+import { useTransactions } from '../../../context/TransactionsContext';
 
 export default function TransactionInfoModal({
   title,
@@ -17,7 +17,7 @@ export default function TransactionInfoModal({
   const [initialData, setInitialData] = useState(null);
   const [additionalModalOpen, setAdditionalModalOpen] = useState(false);
   const { getCategoryById } = useCategories();
-  const { removeExpense } = useExpenses();
+  const { removeTransaction } = useTransactions();
   const categoryObject = getCategoryById(category);
 
   const getDate = () => {
@@ -29,7 +29,7 @@ export default function TransactionInfoModal({
   };
 
   const handleTransactionDelete = () => {
-    removeExpense(transaction.id);
+    removeTransaction(transaction.id);
     onCancel();
   };
 

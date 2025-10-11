@@ -33,7 +33,7 @@ import {
   Clock,
 } from 'lucide-react';
 
-export const EXPENSE_ICONS = {
+export const TRANSACTION_ICONS = {
   Utensils: <Utensils size={30} />,
   Bus: <Bus size={30} />,
   Apple: <Apple size={30} />,

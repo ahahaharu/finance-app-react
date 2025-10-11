@@ -1,9 +1,9 @@
 import React from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
-import { useExpenses } from '../../../context/ExpensesContext';
+import { useTransactions } from '../../../context/TransactionsContext';
 
 export default function Chart({ periodFilter, offset, startDate, endDate }) {
-  const { getFilteredCategoriesWithAmount } = useExpenses();
+  const { getFilteredCategoriesWithAmount } = useTransactions();
 
   const filteredCategories = getFilteredCategoriesWithAmount(
     periodFilter,

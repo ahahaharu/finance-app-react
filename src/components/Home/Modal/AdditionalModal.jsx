@@ -13,8 +13,8 @@ import { CircleEllipsis } from 'lucide-react';
 import CategoryItem from '../Category/CategoryItem';
 import MoreCategoriesModal from './MoreCategoriesModal';
 import { useCategories } from '../../../context/CategoryContext';
-import { useExpenses } from '../../../context/ExpensesContext';
 import dayjs from 'dayjs';
+import { useTransactions } from '../../../context/TransactionsContext';
 
 export default function AdditionalModal({
   title,
@@ -28,7 +28,7 @@ export default function AdditionalModal({
   const [moreCategoriesModalOpen, setMoreCategoriesModalOpen] = useState(false);
   const [anotherCategorySelected, setAnotherCategorySelected] = useState(false);
   const { categories } = useCategories();
-  const { addExpense, editExpense } = useExpenses();
+  const { addTransaction, editTransaction } = useTransactions();
 
   useEffect(() => {
     if (isOpen && isEditMode) {
@@ -85,9 +85,9 @@ export default function AdditionalModal({
       comment: values.comment,
     };
     if (isEditMode) {
-      editExpense(initialData.id, newTransaction);
+      editTransaction(initialData.id, newTransaction);
     } else {
-      addExpense(newTransaction);
+      addTransaction(newTransaction);
     }
 
     onCancel();

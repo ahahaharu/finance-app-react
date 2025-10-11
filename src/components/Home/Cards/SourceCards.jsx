@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import SourceCard from './SourceCard';
-import { useExpenses } from '../../../context/ExpensesContext';
-import { Modal } from 'antd';
 import CategoryHistoryModal from '../Modal/CategoryHistoryModal';
+import { useTransactions } from '../../../context/TransactionsContext';
 
 export default function SourceCards({
   periodFilter,
@@ -10,7 +9,7 @@ export default function SourceCards({
   startDate,
   endDate,
 }) {
-  const { getFilteredCategoriesWithAmount } = useExpenses();
+  const { getFilteredCategoriesWithAmount } = useTransactions();
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
   const filteredCategories = getFilteredCategoriesWithAmount(

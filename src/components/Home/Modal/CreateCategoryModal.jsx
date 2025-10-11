@@ -1,6 +1,9 @@
 import { Button, Form, Input, Modal, Radio } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { COLORS, EXPENSE_ICONS } from '../../../constants/expenseConstants';
+import {
+  COLORS,
+  TRANSACTION_ICONS,
+} from '../../../constants/transactionsConstants';
 import { CircleEllipsis, Plus } from 'lucide-react';
 import MoreIconsModal from './MoreIconsModal';
 import { ChromePicker } from 'react-color';
@@ -32,7 +35,9 @@ export default function CreateCategoryModal({
       return false;
     }
 
-    if (Object.keys(EXPENSE_ICONS).slice(0, 11).includes(anotherIconSelected)) {
+    if (
+      Object.keys(TRANSACTION_ICONS).slice(0, 11).includes(anotherIconSelected)
+    ) {
       return false;
     }
 
@@ -152,10 +157,10 @@ export default function CreateCategoryModal({
                 style={{ color: '#000000' }}
                 onClick={() => handleIconClick(anotherIconSelected)}
               >
-                {EXPENSE_ICONS[anotherIconSelected]}
+                {TRANSACTION_ICONS[anotherIconSelected]}
               </div>
             )}
-            {Object.keys(EXPENSE_ICONS)
+            {Object.keys(TRANSACTION_ICONS)
               .slice(0, sliceEnd)
               .map((iconName) => (
                 <div
@@ -167,7 +172,7 @@ export default function CreateCategoryModal({
                   }`}
                   onClick={() => handleIconClick(iconName)}
                 >
-                  {EXPENSE_ICONS[iconName]}
+                  {TRANSACTION_ICONS[iconName]}
                 </div>
               ))}
             <button
