@@ -6,6 +6,7 @@ import { useTransactions } from '../../../context/TransactionsContext';
 export default function SourceCards({
   periodFilter,
   offset,
+  transactionType,
   startDate,
   endDate,
 }) {
@@ -15,6 +16,7 @@ export default function SourceCards({
   const filteredCategories = getFilteredCategoriesWithAmount(
     periodFilter,
     offset,
+    transactionType,
     periodFilter === 'period' && startDate && endDate ? startDate : null,
     periodFilter === 'period' && startDate && endDate ? endDate : null
   );

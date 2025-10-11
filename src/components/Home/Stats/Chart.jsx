@@ -2,12 +2,19 @@ import React from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { useTransactions } from '../../../context/TransactionsContext';
 
-export default function Chart({ periodFilter, offset, startDate, endDate }) {
+export default function Chart({
+  periodFilter,
+  offset,
+  transactionType,
+  startDate,
+  endDate,
+}) {
   const { getFilteredCategoriesWithAmount } = useTransactions();
 
   const filteredCategories = getFilteredCategoriesWithAmount(
     periodFilter,
     offset,
+    transactionType,
     periodFilter === 'period' && startDate && endDate ? startDate : null,
     periodFilter === 'period' && startDate && endDate ? endDate : null
   );

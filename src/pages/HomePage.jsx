@@ -127,8 +127,13 @@ export default function HomePage() {
         searchParams={searchParams}
         setSearchParams={setSearchParams}
         openPeriodPicker={openPeriodPicker}
+        transactionType={transactionType}
       />
-      <SourceCards periodFilter={periodFilter} offset={offset} />
+      <SourceCards
+        periodFilter={periodFilter}
+        offset={offset}
+        transactionType={transactionType}
+      />
       <PeriodPickerModal
         title="Select Custom Period"
         isOpen={isModalOpen}

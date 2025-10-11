@@ -21,6 +21,7 @@ export default function HomeStats({
   shiftPeriod,
   searchParams,
   setSearchParams,
+  transactionType,
 }) {
   const [additionalModalOpen, setAdditionalModalOpen] = useState(false);
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
@@ -70,6 +71,7 @@ export default function HomeStats({
       <Chart
         periodFilter={periodFilter}
         offset={offset}
+        transactionType={transactionType}
         startDate={startDate}
         endDate={endDate}
       />
@@ -87,7 +89,6 @@ export default function HomeStats({
 
       {additionalModalOpen && (
         <AdditionalModal
-          title="Add Transaction"
           isOpen={additionalModalOpen}
           onCancel={() => setAdditionalModalOpen(false)}
         />

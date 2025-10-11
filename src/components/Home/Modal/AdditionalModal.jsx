@@ -7,6 +7,7 @@ import {
   Radio,
   Select,
   Space,
+  Tabs,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { CircleEllipsis } from 'lucide-react';
@@ -15,9 +16,20 @@ import MoreCategoriesModal from './MoreCategoriesModal';
 import { useCategories } from '../../../context/CategoryContext';
 import dayjs from 'dayjs';
 import { useTransactions } from '../../../context/TransactionsContext';
+import TransactionForm from '../Transaction/TransactionForm';
+
+const items = [
+  {
+    key: '1',
+    label: 'Expense',
+  },
+  {
+    key: '2',
+    label: 'Income',
+  },
+];
 
 export default function AdditionalModal({
-  title,
   isOpen,
   onCancel,
   isEditMode = false,
@@ -25,9 +37,8 @@ export default function AdditionalModal({
 }) {
   const [form] = Form.useForm();
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [moreCategoriesModalOpen, setMoreCategoriesModalOpen] = useState(false);
-  const [anotherCategorySelected, setAnotherCategorySelected] = useState(false);
-  const { categories } = useCategories();
+  const [transactionType, setTransactionType] = useState('Expense');
+
   const { addTransaction, editTransaction } = useTransactions();
 
   useEffect(() => {
@@ -45,39 +56,15 @@ export default function AdditionalModal({
     }
   }, [isOpen]);
 
-  function isAnotherCategory() {
-    if (!anotherCategorySelected) {
-      return null;
-    }
-
-    const category = categories.find(
-      (category) => category.id === anotherCategorySelected
-    );
-    if (categories.slice(0, 7).includes(category)) {
-      return null;
-    }
-
-    return (
-      <CategoryItem
-        key={category.id}
-        category={category}
-        isSelected={selectedCategory === category.id}
-        onClick={() => handleCategoryClick(anotherCategorySelected)}
-      />
-    );
-  }
-
-  useEffect(() => {
-    if (anotherCategorySelected) {
-      setSelectedCategory(anotherCategorySelected);
-      form.setFieldsValue({ category: anotherCategorySelected });
-    }
-  }, [anotherCategorySelected]);
+  const onChange = (key) => {
+    setTransactionType(items.find((item) => item.key === key).label);
+  };
 
   const handleSubmit = (values) => {
     console.log(values);
     const newTransaction = {
       amount: values.amount,
+      type: transactionType,
       currency: values.currency,
       date: values.date.toISOString(),
       account: values.account,
@@ -93,130 +80,26 @@ export default function AdditionalModal({
     onCancel();
   };
 
-  const handleCategoryClick = (categoryId) => {
-    setSelectedCategory(categoryId);
-    form.setFieldsValue({ category: categoryId });
-  };
-
-  const sliceEnd = isAnotherCategory() ? 6 : 7;
-
   return (
     <Modal
-      title={title}
+      title={`${isEditMode ? 'Edit' : 'Add'} Transaction`}
       open={isOpen}
       onCancel={onCancel}
       onOk={handleSubmit}
       footer={null}
     >
-      <Form
-        form={form}
-        labelCol={{ span: 7 }}
-        wrapperCol={{ span: 14 }}
-        layout="horizontal"
-        onFinish={handleSubmit}
-        style={{ maxWidth: 600 }}
-      >
-        <Form.Item label="Amount" name="amount" rules={[{ required: true }]}>
-          <Space.Compact style={{ width: '100%' }}>
-            <Form.Item
-              name="amount"
-              rules={[{ required: true, message: 'Please input the Amount!' }]}
-              style={{ marginBottom: 0 }}
-            >
-              <Input placeholder="Amount" />
-            </Form.Item>
-            <Form.Item
-              name="currency"
-              rules={[{ required: true, message: 'Please select Currency' }]}
-              style={{ marginBottom: 0 }}
-            >
-              <Select placeholder="Сurrency" style={{ width: 120 }}>
-                <Select.Option value="USD">USD</Select.Option>
-                <Select.Option value="EUR">EUR</Select.Option>
-                <Select.Option value="BYN">BYN</Select.Option>
-              </Select>
-            </Form.Item>
-          </Space.Compact>
-        </Form.Item>
-
-        <Form.Item
-          label="Account"
-          name="account"
-          rules={[{ required: true, message: 'Please select Account' }]}
-          style={{ marginBottom: '20px' }}
-        >
-          <Select placeholder="Account" style={{ width: 120 }}>
-            <Select.Option value="Cash">Cash</Select.Option>
-            <Select.Option value="Card">Card</Select.Option>
-          </Select>
-        </Form.Item>
-
-        <Form.Item
-          label="Category"
-          name="category"
-          rules={[{ required: true, message: 'Please select a category!' }]}
-        >
-          <div className="flex flex-wrap gap-3 justify-start">
-            {isAnotherCategory()}
-            {categories.slice(0, sliceEnd).map((category) => (
-              <CategoryItem
-                key={category.name}
-                category={category}
-                isSelected={selectedCategory === category.id}
-                onClick={() => handleCategoryClick(category.id)}
-              />
-            ))}
-            <button
-              type="button"
-              className="flex flex-col items-center justify-center w-1/5 p-0.5 rounded cursor-pointer text-xs text-left hover:bg-sky-50 transition-all"
-              style={{ color: '#6b7280' }}
-              onClick={() => setMoreCategoriesModalOpen(true)}
-            >
-              <CircleEllipsis size={25} />
-              <span className="text-center mt-1 w-full whitespace-nowrap overflow-hidden text-ellipsis">
-                More
-              </span>
-            </button>
-          </div>
-        </Form.Item>
-
-        <Form.Item
-          label="Date"
-          name="date"
-          rules={[{ required: true, message: 'Please select Account' }]}
-          style={{ marginBottom: '20px' }}
-        >
-          <DatePicker />
-        </Form.Item>
-
-        <Form.Item
-          label="Comment"
-          name="comment"
-          style={{ marginBottom: '20px' }}
-        >
-          <Input placeholder="Comment" />
-        </Form.Item>
-
-        <Form.Item wrapperCol={{ offset: 7, span: 14 }}>
-          <div className="flex justify-end gap-2">
-            <Button key="cancel" onClick={onCancel}>
-              Cancel
-            </Button>
-            <Button type="primary" htmlType="submit">
-              Add Transaction
-            </Button>
-          </div>
-        </Form.Item>
-      </Form>
-
-      {moreCategoriesModalOpen && (
-        <MoreCategoriesModal
-          title={'More Categories'}
-          isOpen={moreCategoriesModalOpen}
-          onCancel={() => setMoreCategoriesModalOpen(false)}
-          selectCategory={setAnotherCategorySelected}
+      <div className="flex flex-col items-center">
+        <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+        <TransactionForm
+          transactionType={transactionType}
+          form={form}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          handleSubmit={handleSubmit}
+          onCancel={onCancel}
+          isEditMode={isEditMode}
         />
-      )}
+      </div>
     </Modal>
   );
 }

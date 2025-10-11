@@ -31,6 +31,8 @@ import {
   Bell,
   Calendar,
   Clock,
+  HandCoins,
+  Landmark,
 } from 'lucide-react';
 
 export const TRANSACTION_ICONS = {
@@ -64,6 +66,9 @@ export const TRANSACTION_ICONS = {
   Bell: <Bell size={30} />,
   Calendar: <Calendar size={30} />,
   Clock: <Clock size={30} />,
+  Payment: <HandCoins size={30} />,
+  Banknote: <Banknote size={30} />,
+  Bank: <Landmark size={30} />,
 };
 
 export const COLORS = {
@@ -78,22 +83,31 @@ export const COLORS = {
 };
 
 export const CATEGORIES = [
-  { name: 'Food', type: 'Expenses', icon: 'Utensils', color: COLORS.red },
-  { name: 'Transport', type: 'Expenses', icon: 'Bus', color: COLORS.blue },
-  { name: 'Groceries', type: 'Expenses', icon: 'Apple', color: COLORS.green },
-  { name: 'Sport', type: 'Expenses', icon: 'Dumbbell', color: COLORS.orange },
+  { name: 'Food', type: 'Expense', icon: 'Utensils', color: COLORS.red },
+  { name: 'Transport', type: 'Expense', icon: 'Bus', color: COLORS.blue },
+  { name: 'Groceries', type: 'Expense', icon: 'Apple', color: COLORS.green },
+  {
+    name: 'Sport',
+    type: 'Expense',
+    icon: 'Dumbbell',
+    color: COLORS.orange,
+  },
   {
     name: 'Shopping',
-    type: 'Expenses',
+    type: 'Expense',
     icon: 'ShoppingBag',
     color: COLORS.purple,
   },
-  { name: 'Bills', type: 'Expenses', icon: 'Wallet', color: COLORS.yellow },
-  { name: 'Cafe', type: 'Expenses', icon: 'Coffee', color: COLORS.teal },
+  { name: 'Bills', type: 'Expense', icon: 'Wallet', color: COLORS.yellow },
+  { name: 'Cafe', type: 'Expense', icon: 'Coffee', color: COLORS.teal },
   {
     name: 'Entertainment',
-    type: 'Expenses',
+    type: 'Expense',
     icon: 'Gamepad',
     color: COLORS.pink,
   },
+  { name: 'Paycheck', type: 'Income', icon: 'Payment', color: COLORS.blue },
+  { name: 'Gift', type: 'Income', icon: 'Gift', color: COLORS.pink },
+  { name: 'Interest', type: 'Income', icon: 'Bank', color: COLORS.green },
+  { name: 'Transfer', type: 'Income', icon: 'Banknote', color: COLORS.green },
 ];

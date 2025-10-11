@@ -21,3 +21,4 @@ export default function CategoryItem({ category, isSelected, onClick }) {
     </div>
   );
 }
+3;

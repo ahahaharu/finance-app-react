@@ -50,10 +50,14 @@ export function TransactionsProvider({ children }) {
   const filterTransactionsByPeriod = (
     periodFilter,
     offset = 0,
+    transactionType = 'Expense',
     startDate = null,
     endDate = null
   ) => {
-    const transactionsToFilter = [...transactions];
+    const transactionsToFilter = transactions.filter(
+      (trans) => trans.type.toLowerCase() === transactionType
+    );
+    console.log(transactionsToFilter);
     const now = new Date();
 
     const effectiveStartDate = startDate
@@ -153,12 +157,14 @@ export function TransactionsProvider({ children }) {
   const getFilteredCategoriesWithAmount = (
     periodFilter,
     offset = 0,
+    transactionType,
     startDate = null,
     endDate = null
   ) => {
     const filteredTransactions = filterTransactionsByPeriod(
       periodFilter,
       offset,
+      transactionType,
       startDate,
       endDate
     );
