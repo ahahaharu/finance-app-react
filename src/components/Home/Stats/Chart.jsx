@@ -36,7 +36,7 @@ export default function Chart({
         series={[
           {
             data: data || [],
-            innerRadius: 80,
+            innerRadius: 70,
             outerRadius: 100,
             paddingAngle: 2,
             cornerRadius: 5,

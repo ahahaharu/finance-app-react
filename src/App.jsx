@@ -5,6 +5,9 @@ import HomePage from './pages/HomePage';
 import { CategoriesProvider } from './context/CategoryContext';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { TransactionsProvider } from './context/TransactionsContext';
+import AccountsPage from './pages/AccountsPage';
+import ChartsPage from './pages/ChartsPage';
+import SettingsPage from './pages/SettingsPage';
 
 function App() {
   return (
@@ -15,6 +18,9 @@ function App() {
           <Routes>
             <Route index element={<Navigate to={'/home'} />} />
             <Route path="/home" element={<HomePage />} />
+            <Route path="/accounts" element={<AccountsPage />} />
+            <Route path="/charts" element={<ChartsPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </TransactionsProvider>
       </CategoriesProvider>
