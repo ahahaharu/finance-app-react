@@ -196,13 +196,18 @@ export function TransactionsProvider({ children }) {
       startDate,
       endDate
     );
-    return filteredTransactions.reduce((acc, cur) => {
+    const balance = filteredTransactions.reduce((acc, cur) => {
       if (cur.type === 'Income') {
         return acc + cur.amount;
       } else {
         return acc - cur.amount;
       }
     }, 0);
+
+    if (transactionType) {
+      return transactionType === 'income' ? balance : -balance;
+    }
+    return balance;
   };
 
   const value = {

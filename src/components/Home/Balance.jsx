@@ -6,9 +6,9 @@ export default function Balance() {
 
   return (
     <div className="my-10">
-      <p>Total</p>
+      <p>Current Balance</p>
       <h1 className="text-6xl font-semibold text-black">
-        {getBalanceByPeriod()}
+        {getBalanceByPeriod()} USD
       </h1>
     </div>
   );

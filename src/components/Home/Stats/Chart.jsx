@@ -9,7 +9,8 @@ export default function Chart({
   startDate,
   endDate,
 }) {
-  const { getFilteredCategoriesWithAmount } = useTransactions();
+  const { getFilteredCategoriesWithAmount, getBalanceByPeriod } =
+    useTransactions();
 
   const filteredCategories = getFilteredCategoriesWithAmount(
     periodFilter,
@@ -26,28 +27,47 @@ export default function Chart({
   }));
 
   return (
-    <PieChart
-      className="cursor-pointer"
-      series={[
-        {
-          data: data || [],
-          innerRadius: 30,
-          outerRadius: 100,
-          paddingAngle: 5,
-          cornerRadius: 5,
-          startAngle: -45,
-          endAngle: 360,
-          cx: 125,
-          cy: 125,
-        },
-      ]}
-      width={250}
-      height={250}
-      slotProps={{
-        legend: {
-          hidden: true,
-        },
-      }}
-    />
+    <div
+      className="relative flex items-center justify-center"
+      style={{ width: 250, height: 250 }}
+    >
+      <PieChart
+        className="cursor-pointer"
+        series={[
+          {
+            data: data || [],
+            innerRadius: 80,
+            outerRadius: 100,
+            paddingAngle: 2,
+            cornerRadius: 5,
+            startAngle: 0,
+            endAngle: 360,
+            cx: '50%',
+            cy: '50%',
+          },
+        ]}
+        width={250}
+        height={250}
+        slotProps={{
+          legend: {
+            hidden: true,
+          },
+        }}
+      />
+      {data.length !== 0 && (
+        <div
+          className="text-2xl font-bold text-black absolute"
+          style={{
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            textAlign: 'center',
+            lineHeight: '1.2',
+          }}
+        >
+          {getBalanceByPeriod(periodFilter, offset, transactionType)} USD
+        </div>
+      )}
+    </div>
   );
 }
