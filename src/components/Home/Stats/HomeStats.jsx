@@ -99,6 +99,7 @@ export default function HomeStats({
           title="Transactions History"
           isOpen={historyModalOpen}
           onCancel={() => setHistoryModalOpen(false)}
+          transactionType={transactionType}
         />
       )}
     </div>

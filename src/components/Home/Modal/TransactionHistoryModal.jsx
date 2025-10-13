@@ -4,14 +4,19 @@ import TransactionCard from '../Transaction/TransactionCard';
 import TransactionInfoModal from './TransactionInfoModal';
 import { useTransactions } from '../../../context/TransactionsContext';
 
-export default function TransactionHistoryModal({ title, isOpen, onCancel }) {
+export default function TransactionHistoryModal({
+  title,
+  isOpen,
+  onCancel,
+  transactionType,
+}) {
   const { transactions } = useTransactions();
   const [selectedTransactionId, setSelectedTransactionId] = useState(null);
 
   const groupedTransactions = React.useMemo(() => {
-    const sortedTransactions = [...transactions].sort(
-      (a, b) => new Date(b.date) - new Date(a.date)
-    );
+    const sortedTransactions = transactions
+      .filter((trans) => trans.type.toLowerCase() === transactionType)
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
 
     return sortedTransactions.reduce((acc, transaction) => {
       const date = new Date(transaction.date).toLocaleDateString('en-US', {
@@ -38,7 +43,7 @@ export default function TransactionHistoryModal({ title, isOpen, onCancel }) {
   return (
     <Modal title={title} open={isOpen} onCancel={onCancel} onOk={onCancel}>
       <div>
-        {transactions.length ? (
+        {groupedTransactions.length != 0 ? (
           Object.entries(groupedTransactions).map(([date, transactions]) => (
             <div key={date} className="mb-4">
               <h2 className="font-bold mb-1">{date}</h2>

@@ -50,14 +50,18 @@ export function TransactionsProvider({ children }) {
   const filterTransactionsByPeriod = (
     periodFilter,
     offset = 0,
-    transactionType = 'Expense',
+    transactionType = null,
     startDate = null,
     endDate = null
   ) => {
+    if (!transactionType) {
+      return [...transactions];
+    }
+
     const transactionsToFilter = transactions.filter(
       (trans) => trans.type.toLowerCase() === transactionType
     );
-    console.log(transactionsToFilter);
+    console.log(periodFilter, transactionType, transactionsToFilter);
     const now = new Date();
 
     const effectiveStartDate = startDate
@@ -178,6 +182,29 @@ export function TransactionsProvider({ children }) {
       .filter((item) => item !== undefined);
   };
 
+  const getBalanceByPeriod = (
+    periodFilter = null,
+    offset = null,
+    transactionType,
+    startDate = null,
+    endDate = null
+  ) => {
+    const filteredTransactions = filterTransactionsByPeriod(
+      periodFilter,
+      offset,
+      transactionType,
+      startDate,
+      endDate
+    );
+    return filteredTransactions.reduce((acc, cur) => {
+      if (cur.type === 'Income') {
+        return acc + cur.amount;
+      } else {
+        return acc - cur.amount;
+      }
+    }, 0);
+  };
+
   const value = {
     transactions,
     addTransaction,
@@ -185,6 +212,7 @@ export function TransactionsProvider({ children }) {
     removeTransaction,
     getTransactionsByCategory,
     getFilteredCategoriesWithAmount,
+    getBalanceByPeriod,
   };
 
   return (
