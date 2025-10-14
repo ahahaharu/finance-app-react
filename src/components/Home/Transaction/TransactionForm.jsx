@@ -4,6 +4,9 @@ import { useCategories } from '../../../context/CategoryContext';
 import CategoryItem from '../Category/CategoryItem';
 import { CircleEllipsis } from 'lucide-react';
 import MoreCategoriesModal from '../Modal/MoreCategoriesModal';
+import { useAccounts } from '../../../context/AccountsContext';
+import getIconComponent from '../../../utils/getIconComponent';
+import { useTransactions } from '../../../context/TransactionsContext';
 
 export default function TransactionForm({
   transactionType,
@@ -15,6 +18,8 @@ export default function TransactionForm({
   isEditMode,
 }) {
   const { categories } = useCategories();
+  const { accounts } = useAccounts();
+  const { getBalanceByAccount } = useTransactions();
   const [moreCategoriesModalOpen, setMoreCategoriesModalOpen] = useState(false);
   const [anotherCategorySelected, setAnotherCategorySelected] = useState(false);
 
@@ -93,9 +98,21 @@ export default function TransactionForm({
         rules={[{ required: true, message: 'Please select Account' }]}
         style={{ marginBottom: '20px' }}
       >
-        <Select placeholder="Account" style={{ width: 120 }}>
-          <Select.Option value="Cash">Cash</Select.Option>
-          <Select.Option value="Card">Card</Select.Option>
+        <Select placeholder="Account" style={{ width: 200 }}>
+          {accounts.map((account) => (
+            <Select.Option value={account.id}>
+              <div
+                className="flex items-center justify-between"
+                style={{ color: account.color }}
+              >
+                <div className="flex gap-2 items-center">
+                  {getIconComponent(account.icon)}
+                  {account.name}
+                </div>
+                <span>{getBalanceByAccount(account.id)} USD</span>
+              </div>
+            </Select.Option>
+          ))}
         </Select>
       </Form.Item>
 

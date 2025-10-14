@@ -114,11 +114,7 @@ export default function HomePage() {
 
   return (
     <Wrapper>
-      <Balance
-        periodFilter={periodFilter}
-        offset={offset}
-        transactionType={transactionType}
-      />
+      <Balance />
       <TransactionSwitch
         transactionType={transactionType}
         toggleTransaction={toggleTransaction}

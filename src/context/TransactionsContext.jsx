@@ -185,7 +185,7 @@ export function TransactionsProvider({ children }) {
   const getBalanceByPeriod = (
     periodFilter = null,
     offset = null,
-    transactionType,
+    transactionType = null,
     startDate = null,
     endDate = null
   ) => {
@@ -210,6 +210,21 @@ export function TransactionsProvider({ children }) {
     return balance;
   };
 
+  const getBalanceByAccount = (accountId) => {
+    const filteredTransactions = transactions.filter(
+      (trans) => trans.account === accountId
+    );
+    const balance = filteredTransactions.reduce((acc, cur) => {
+      if (cur.type === 'Income') {
+        return acc + cur.amount;
+      } else {
+        return acc - cur.amount;
+      }
+    }, 0);
+
+    return balance;
+  };
+
   const value = {
     transactions,
     addTransaction,
@@ -218,6 +233,7 @@ export function TransactionsProvider({ children }) {
     getTransactionsByCategory,
     getFilteredCategoriesWithAmount,
     getBalanceByPeriod,
+    getBalanceByAccount,
   };
 
   return (
