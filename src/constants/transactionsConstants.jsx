@@ -33,6 +33,13 @@ import {
   Clock,
   HandCoins,
   Landmark,
+  Bitcoin,
+  CirclePoundSterling,
+  CircleDollarSign,
+  SquarePercent,
+  Gem,
+  CirclePercent,
+  Vault,
 } from 'lucide-react';
 
 export const TRANSACTION_ICONS = {
@@ -68,6 +75,19 @@ export const TRANSACTION_ICONS = {
   Clock: <Clock size={30} />,
   Payment: <HandCoins size={30} />,
   Bank: <Landmark size={30} />,
+};
+
+export const ACCOUNTS_ICONS = {
+  CreditCard: <CreditCard size={30} />,
+  Banknote: <Banknote size={30} />,
+  Vault: <Vault size={30} />,
+  PiggyBank: <PiggyBank size={30} />,
+  Crypto: <Bitcoin size={30} />,
+  Coin: <CircleDollarSign size={30} />,
+  Bank: <Landmark size={30} />,
+  Percent: <CirclePercent size={30} />,
+  Wallet: <Wallet size={30} />,
+  Gem: <Gem size={30} />,
 };
 
 export const COLORS = {

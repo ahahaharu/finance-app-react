@@ -1,5 +1,5 @@
 import React from 'react';
-import getIconComponent from '../../../utils/getIconComponent';
+import { getIconComponent } from '../../../utils/getIconComponent';
 
 export default function SourceCard({
   icon,

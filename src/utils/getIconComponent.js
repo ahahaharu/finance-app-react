@@ -1,7 +1,12 @@
-import { TRANSACTION_ICONS } from '../constants/transactionsConstants';
+import {
+  ACCOUNTS_ICONS,
+  TRANSACTION_ICONS,
+} from '../constants/transactionsConstants';
 
-const getIconComponent = (iconName) => {
+export const getIconComponent = (iconName) => {
   return TRANSACTION_ICONS[iconName];
 };
 
-export default getIconComponent;
+export const getAccountIconComponent = (iconName) => {
+  return ACCOUNTS_ICONS[iconName];
+};

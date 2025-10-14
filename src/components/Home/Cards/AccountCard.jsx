@@ -1,5 +1,5 @@
 import React from 'react';
-import getIconComponent from '../../../utils/getIconComponent';
+import { getAccountIconComponent } from '../../../utils/getIconComponent';
 import { useTransactions } from '../../../context/TransactionsContext';
 
 export default function AccountCard({ account, onClick }) {
@@ -15,7 +15,7 @@ export default function AccountCard({ account, onClick }) {
         style={{ color: styleColor }}
         className={`flex gap-3  items-center `}
       >
-        {getIconComponent(account.icon)}{' '}
+        {getAccountIconComponent(account.icon)}{' '}
         <h1 className="text-2xl">{account.name}</h1>
       </div>
       <div className="text-lg">{getBalanceByAccount(account.id)} USD</div>

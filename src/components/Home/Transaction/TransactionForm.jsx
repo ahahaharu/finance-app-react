@@ -5,7 +5,7 @@ import CategoryItem from '../Category/CategoryItem';
 import { CircleEllipsis } from 'lucide-react';
 import MoreCategoriesModal from '../Modal/MoreCategoriesModal';
 import { useAccounts } from '../../../context/AccountsContext';
-import getIconComponent from '../../../utils/getIconComponent';
+import { getAccountIconComponent } from '../../../utils/getIconComponent';
 import { useTransactions } from '../../../context/TransactionsContext';
 
 export default function TransactionForm({
@@ -98,7 +98,7 @@ export default function TransactionForm({
         rules={[{ required: true, message: 'Please select Account' }]}
         style={{ marginBottom: '20px' }}
       >
-        <Select placeholder="Account" style={{ width: 200 }}>
+        <Select placeholder="Account" style={{ width: 275 }}>
           {accounts.map((account) => (
             <Select.Option value={account.id}>
               <div
@@ -106,8 +106,10 @@ export default function TransactionForm({
                 style={{ color: account.color }}
               >
                 <div className="flex gap-2 items-center">
-                  {getIconComponent(account.icon)}
-                  {account.name}
+                  {getAccountIconComponent(account.icon)}
+                  <span className="max-w-30 overflow-hidden text-ellipsis">
+                    {account.name}
+                  </span>
                 </div>
                 <span>{getBalanceByAccount(account.id)} USD</span>
               </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import getIconComponent from '../../../utils/getIconComponent';
+import { getIconComponent } from '../../../utils/getIconComponent';
 import { useCategories } from '../../../context/CategoryContext';
 import TransactionInfoModal from '../Modal/TransactionInfoModal';
 

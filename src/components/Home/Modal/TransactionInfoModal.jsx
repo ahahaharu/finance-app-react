@@ -1,10 +1,11 @@
 import { Button, Modal } from 'antd';
 import React, { useState } from 'react';
 import { useCategories } from '../../../context/CategoryContext';
-import getIconComponent from '../../../utils/getIconComponent';
+import { getIconComponent } from '../../../utils/getIconComponent';
 import { Pencil, Trash } from 'lucide-react';
 import AdditionalModal from './AdditionalModal';
 import { useTransactions } from '../../../context/TransactionsContext';
+import { useAccounts } from '../../../context/AccountsContext';
 
 export default function TransactionInfoModal({
   title,
@@ -19,6 +20,7 @@ export default function TransactionInfoModal({
   const { getCategoryById } = useCategories();
   const { removeTransaction } = useTransactions();
   const categoryObject = getCategoryById(category);
+  const { getAccountById } = useAccounts();
 
   const getDate = () => {
     return new Date(date).toLocaleDateString('en-US', {
@@ -74,7 +76,9 @@ export default function TransactionInfoModal({
         <h2 className="text-lg">{categoryObject.name}</h2>
       </div>
       <h2>Account:</h2>
-      <div className="text-lg text-blue-500">{account}</div>
+      <div className="text-lg text-blue-500">
+        {getAccountById(account).name}
+      </div>
       {comment ? (
         <>
           <h2>Comment</h2>
