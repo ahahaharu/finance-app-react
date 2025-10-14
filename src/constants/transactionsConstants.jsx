@@ -110,3 +110,8 @@ export const CATEGORIES = [
   { name: 'Interest', type: 'Income', icon: 'Bank', color: COLORS.green },
   { name: 'Transfer', type: 'Income', icon: 'Banknote', color: COLORS.green },
 ];
+
+export const ACCOUNTS = [
+  { name: 'Cash', icon: 'Banknote', color: COLORS.green },
+  { name: 'Card', icon: 'CreditCard', color: COLORS.red },
+];
