@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useCategories } from './CategoryContext';
+import { useSettings } from './SettingsContext';
 import { useSearchParams } from 'react-router-dom';
+import axios from 'axios';
 import { createTransaction } from '../models/transaction';
 
 const TransactionsContext = createContext();
@@ -12,6 +14,55 @@ export function TransactionsProvider({ children }) {
     return savedTransactions ? JSON.parse(savedTransactions) : [];
   });
   const { categories } = useCategories();
+  const { currentCurrency } = useSettings();
+  const [exchangeRates, setExchangeRates] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const API_KEY = import.meta.env.VITE_EXCHANGE_API_KEY;
+  const API_URL = API_KEY
+    ? `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/${currentCurrency}`
+    : null;
+
+  useEffect(() => {
+    if (!API_KEY || !API_URL) {
+      setError('API-ключ не настроен. Проверьте файл .env');
+      setLoading(false);
+      return;
+    }
+
+    const cachedRates = localStorage.getItem(
+      `exchangeRates_${currentCurrency}`
+    );
+    const cacheTime = localStorage.getItem(
+      `exchangeRatesTime_${currentCurrency}`
+    );
+    const now = Date.now();
+
+    if (cachedRates && cacheTime && now - cacheTime < 24 * 60 * 60 * 1000) {
+      setExchangeRates(JSON.parse(cachedRates));
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    axios
+      .get(API_URL)
+      .then((response) => {
+        setExchangeRates(response.data.conversion_rates);
+        localStorage.setItem(
+          `exchangeRates_${currentCurrency}`,
+          JSON.stringify(response.data.conversion_rates)
+        );
+        localStorage.setItem(`exchangeRatesTime_${currentCurrency}`, now);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError('Ошибка загрузки курсов валют');
+        setLoading(false);
+        console.error(err);
+      });
+  }, [currentCurrency, API_URL]);
 
   useEffect(() => {
     localStorage.setItem('transactions', JSON.stringify(transactions));
@@ -39,9 +90,13 @@ export function TransactionsProvider({ children }) {
   const getTransactionsByCategory = (filteredTransactions) => {
     return (filteredTransactions || transactions).reduce((acc, transaction) => {
       const { category, amount, currency } = transaction;
+      const convertedAmount =
+        currency === currentCurrency
+          ? amount
+          : Number((amount / (exchangeRates[currency] || 1)).toFixed(2));
       acc[category] = {
-        amount: (acc[category]?.amount || 0) + amount,
-        currency,
+        amount: (acc[category]?.amount || 0) + convertedAmount,
+        currency: currentCurrency,
       };
       return acc;
     }, {});
@@ -61,7 +116,6 @@ export function TransactionsProvider({ children }) {
     const transactionsToFilter = transactions.filter(
       (trans) => trans.type.toLowerCase() === transactionType
     );
-    console.log(periodFilter, transactionType, transactionsToFilter);
     const now = new Date();
 
     const effectiveStartDate = startDate
@@ -189,6 +243,8 @@ export function TransactionsProvider({ children }) {
     startDate = null,
     endDate = null
   ) => {
+    if (loading || error || !API_KEY) return 0;
+
     const filteredTransactions = filterTransactionsByPeriod(
       periodFilter,
       offset,
@@ -196,33 +252,60 @@ export function TransactionsProvider({ children }) {
       startDate,
       endDate
     );
-    const balance = filteredTransactions.reduce((acc, cur) => {
-      if (cur.type === 'Income') {
-        return acc + cur.amount;
-      } else {
-        return acc - cur.amount;
-      }
-    }, 0);
+    const balance = filteredTransactions
+      .reduce((acc, cur) => {
+        const convertedAmount =
+          cur.currency === currentCurrency
+            ? cur.amount
+            : Number(cur.amount / (exchangeRates[cur.currency] || 1));
+        console.log(
+          `Converting ${cur.amount} ${
+            cur.currency
+          } to ${currentCurrency}: ${convertedAmount} (rate: ${
+            exchangeRates[cur.currency]
+          })`
+        );
+        if (cur.type === 'Income') {
+          return acc + convertedAmount;
+        } else {
+          return acc - convertedAmount;
+        }
+      }, 0)
+      .toFixed(2);
 
     if (transactionType) {
       return transactionType === 'income' ? balance : -balance;
     }
+
     return balance;
   };
 
   const getBalanceByAccount = (accountId) => {
+    if (loading || error || !API_KEY) return 0;
+
     const filteredTransactions = transactions.filter(
       (trans) => trans.account === accountId
     );
     const balance = filteredTransactions.reduce((acc, cur) => {
+      const convertedAmount =
+        cur.currency === currentCurrency
+          ? cur.amount
+          : Number(cur.amount / (exchangeRates[cur.currency] || 1));
+      console.log(
+        `Converting ${cur.amount} ${
+          cur.currency
+        } to ${currentCurrency}: ${convertedAmount} (rate: ${
+          exchangeRates[cur.currency]
+        })`
+      );
       if (cur.type === 'Income') {
-        return acc + cur.amount;
+        return acc + convertedAmount;
       } else {
-        return acc - cur.amount;
+        return acc - convertedAmount;
       }
     }, 0);
 
-    return balance;
+    return balance.toFixed(2);
   };
 
   const value = {
@@ -234,6 +317,8 @@ export function TransactionsProvider({ children }) {
     getFilteredCategoriesWithAmount,
     getBalanceByPeriod,
     getBalanceByAccount,
+    loading,
+    error,
   };
 
   return (
@@ -247,7 +332,7 @@ export function useTransactions() {
   const context = useContext(TransactionsContext);
   if (!context) {
     throw new Error(
-      'usetransactions must be used within an transactionsProvider'
+      'useTransactions must be used within a TransactionsProvider'
     );
   }
   return context;

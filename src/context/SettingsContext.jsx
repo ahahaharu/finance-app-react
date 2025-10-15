@@ -12,6 +12,7 @@ export function SettingsProvider({ children }) {
       return defaultCurrency;
     }
   });
+  const currencies = ['USD', 'BYN', 'EUR', 'RUB'];
 
   useEffect(() => {
     localStorage.setItem('currentCurrency', JSON.stringify(currentCurrency));
@@ -21,7 +22,7 @@ export function SettingsProvider({ children }) {
     setCurrentCurrency(currency);
   };
 
-  const value = { currentCurrency, changeCurrency };
+  const value = { currencies, currentCurrency, changeCurrency };
 
   return (
     <SettingsContext.Provider value={value}>

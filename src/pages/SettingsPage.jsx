@@ -3,10 +3,10 @@ import Wrapper from '../components/Wrapper/Wrapper';
 import { Select } from 'antd';
 import { useSettings } from '../context/SettingsContext';
 
-const currencies = ['USD', 'BYN', 'EUR'];
+const currencies = ['USD', 'BYN', 'EUR', 'RUB'];
 
 export default function SettingsPage() {
-  const { currentCurrency, changeCurrency } = useSettings();
+  const { currencies, currentCurrency, changeCurrency } = useSettings();
 
   const handleCurrecySelectChange = (value) => {
     changeCurrency(value);

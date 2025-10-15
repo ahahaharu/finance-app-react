@@ -7,6 +7,7 @@ import MoreCategoriesModal from '../Modal/MoreCategoriesModal';
 import { useAccounts } from '../../../context/AccountsContext';
 import { getAccountIconComponent } from '../../../utils/getIconComponent';
 import { useTransactions } from '../../../context/TransactionsContext';
+import { useSettings } from '../../../context/SettingsContext';
 
 export default function TransactionForm({
   currentTransactionType,
@@ -20,6 +21,7 @@ export default function TransactionForm({
   const { categories } = useCategories();
   const { accounts } = useAccounts();
   const { getBalanceByAccount } = useTransactions();
+  const { currencies } = useSettings();
   const [moreCategoriesModalOpen, setMoreCategoriesModalOpen] = useState(false);
   const [anotherCategorySelected, setAnotherCategorySelected] = useState(false);
 
@@ -84,9 +86,9 @@ export default function TransactionForm({
             style={{ marginBottom: 0 }}
           >
             <Select placeholder="Сurrency" style={{ width: 120 }}>
-              <Select.Option value="USD">USD</Select.Option>
-              <Select.Option value="EUR">EUR</Select.Option>
-              <Select.Option value="BYN">BYN</Select.Option>
+              {currencies.map((currency) => (
+                <Select.Option value={currency}>{currency}</Select.Option>
+              ))}
             </Select>
           </Form.Item>
         </Space.Compact>
