@@ -30,7 +30,6 @@ export default function SourceCards({
           categoryName={category.name}
           color={category.color}
           amount={category.amount}
-          currency={category.currency}
           onClick={() => setSelectedCategoryId(category.id)}
         />
       ))}

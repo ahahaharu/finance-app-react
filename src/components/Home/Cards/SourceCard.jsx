@@ -1,14 +1,15 @@
 import React from 'react';
 import { getIconComponent } from '../../../utils/getIconComponent';
+import { useSettings } from '../../../context/SettingsContext';
 
 export default function SourceCard({
   icon,
   categoryName,
   color,
   amount,
-  currency,
   onClick,
 }) {
+  const { currentCurrency } = useSettings();
   const styleColor = color;
   return (
     <div
@@ -22,7 +23,7 @@ export default function SourceCard({
         {getIconComponent(icon)} <h1 className="text-2xl">{categoryName}</h1>
       </div>
       <div className="text-lg">
-        {amount} {currency}
+        {amount} {currentCurrency}
       </div>
     </div>
   );

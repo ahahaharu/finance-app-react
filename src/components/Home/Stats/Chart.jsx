@@ -1,6 +1,7 @@
 import React from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { useTransactions } from '../../../context/TransactionsContext';
+import { useSettings } from '../../../context/SettingsContext';
 
 export default function Chart({
   periodFilter,
@@ -11,6 +12,7 @@ export default function Chart({
 }) {
   const { getFilteredCategoriesWithAmount, getBalanceByPeriod } =
     useTransactions();
+  const { currentCurrency } = useSettings();
 
   const filteredCategories = getFilteredCategoriesWithAmount(
     periodFilter,
@@ -65,7 +67,8 @@ export default function Chart({
             lineHeight: '1.2',
           }}
         >
-          {getBalanceByPeriod(periodFilter, offset, transactionType)} USD
+          {getBalanceByPeriod(periodFilter, offset, transactionType)}{' '}
+          {currentCurrency}
         </div>
       )}
     </div>

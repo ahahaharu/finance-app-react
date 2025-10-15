@@ -1,9 +1,11 @@
 import React from 'react';
 import { getAccountIconComponent } from '../../../utils/getIconComponent';
 import { useTransactions } from '../../../context/TransactionsContext';
+import { useSettings } from '../../../context/SettingsContext';
 
 export default function AccountCard({ account, onClick }) {
   const { getBalanceByAccount } = useTransactions();
+  const { currentCurrency } = useSettings();
 
   const styleColor = account.color;
   return (
@@ -18,7 +20,9 @@ export default function AccountCard({ account, onClick }) {
         {getAccountIconComponent(account.icon)}{' '}
         <h1 className="text-2xl">{account.name}</h1>
       </div>
-      <div className="text-lg">{getBalanceByAccount(account.id)} USD</div>
+      <div className="text-lg">
+        {getBalanceByAccount(account.id)} {currentCurrency}
+      </div>
     </div>
   );
 }

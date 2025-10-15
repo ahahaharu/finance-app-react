@@ -9,24 +9,27 @@ import AccountsPage from './pages/AccountsPage';
 import ChartsPage from './pages/ChartsPage';
 import SettingsPage from './pages/SettingsPage';
 import { AccountsProvider } from './context/AccountsContext';
+import { SettingsProvider } from './context/SettingsContext';
 
 function App() {
   return (
     <BrowserRouter>
-      <CategoriesProvider>
-        <AccountsProvider>
-          <TransactionsProvider>
-            <Header />
-            <Routes>
-              <Route index element={<Navigate to={'/home'} />} />
-              <Route path="/home" element={<HomePage />} />
-              <Route path="/accounts" element={<AccountsPage />} />
-              <Route path="/charts" element={<ChartsPage />} />
-              <Route path="/settings" element={<SettingsPage />} />
-            </Routes>
-          </TransactionsProvider>
-        </AccountsProvider>
-      </CategoriesProvider>
+      <SettingsProvider>
+        <CategoriesProvider>
+          <AccountsProvider>
+            <TransactionsProvider>
+              <Header />
+              <Routes>
+                <Route index element={<Navigate to={'/home'} />} />
+                <Route path="/home" element={<HomePage />} />
+                <Route path="/accounts" element={<AccountsPage />} />
+                <Route path="/charts" element={<ChartsPage />} />
+                <Route path="/settings" element={<SettingsPage />} />
+              </Routes>
+            </TransactionsProvider>
+          </AccountsProvider>
+        </CategoriesProvider>
+      </SettingsProvider>
     </BrowserRouter>
   );
 }
