@@ -77,7 +77,7 @@ export default function HomeStats({
       />
       <div className="w-full flex justify-center gap-3">
         <Button icon={<Plus />} onClick={handleAdditionalModalOpen} primary>
-          Add Expenses
+          Add Transaction
         </Button>
         <Button
           icon={<ClipboardClock />}
@@ -91,6 +91,9 @@ export default function HomeStats({
         <AdditionalModal
           isOpen={additionalModalOpen}
           onCancel={() => setAdditionalModalOpen(false)}
+          transactionType={
+            transactionType.charAt(0).toUpperCase() + transactionType.slice(1)
+          }
         />
       )}
 

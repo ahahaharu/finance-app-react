@@ -32,19 +32,22 @@ const items = [
 export default function AdditionalModal({
   isOpen,
   onCancel,
+  transactionType,
   isEditMode = false,
   initialData = null,
 }) {
   const [form] = Form.useForm();
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [transactionType, setTransactionType] = useState('Expense');
+  const [currentTransactionType, setCurrentTransactionType] =
+    useState(transactionType);
+  console.log(currentTransactionType);
 
   const { addTransaction, editTransaction } = useTransactions();
 
   useEffect(() => {
     if (isOpen && isEditMode) {
       form.resetFields();
-      setTransactionType(initialData.type);
+      setCurrentTransactionType(transactionType);
       form.setFieldsValue({
         amount: initialData.amount,
         currency: initialData.currency,
@@ -58,18 +61,21 @@ export default function AdditionalModal({
   }, [isOpen]);
 
   const getActiveTabKey = () => {
-    return items.find((item) => item.label === transactionType)?.key || '1';
+    return (
+      items.find((item) => item.label === currentTransactionType)?.key || '1'
+    );
   };
 
   const onChange = (key) => {
-    setTransactionType(items.find((item) => item.key === key).label);
+    console.log(key);
+    setCurrentTransactionType(items.find((item) => item.key === key).label);
   };
 
   const handleSubmit = (values) => {
     console.log(values);
     const newTransaction = {
       amount: values.amount,
-      type: transactionType,
+      type: currentTransactionType,
       currency: values.currency,
       date: values.date.toISOString(),
       account: values.account,
@@ -96,7 +102,7 @@ export default function AdditionalModal({
       <div className="flex flex-col items-center">
         <Tabs activeKey={getActiveTabKey()} items={items} onChange={onChange} />
         <TransactionForm
-          transactionType={transactionType}
+          currentTransactionType={currentTransactionType}
           form={form}
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}

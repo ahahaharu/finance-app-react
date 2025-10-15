@@ -95,6 +95,7 @@ export default function TransactionInfoModal({
           title="Add Transaction"
           isOpen={additionalModalOpen}
           onCancel={() => setAdditionalModalOpen(false)}
+          transactionType={transaction.type}
           isEditMode={isEditMode}
           initialData={initialData}
         />

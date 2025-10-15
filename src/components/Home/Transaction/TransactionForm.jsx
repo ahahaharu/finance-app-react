@@ -9,7 +9,7 @@ import { getAccountIconComponent } from '../../../utils/getIconComponent';
 import { useTransactions } from '../../../context/TransactionsContext';
 
 export default function TransactionForm({
-  transactionType,
+  currentTransactionType,
   form,
   selectedCategory,
   setSelectedCategory,
@@ -126,7 +126,7 @@ export default function TransactionForm({
         <div className="flex flex-wrap gap-3 justify-start">
           {isAnotherCategory()}
           {categories
-            .filter((category) => category.type === transactionType)
+            .filter((category) => category.type === currentTransactionType)
             .slice(0, sliceEnd)
             .map((category) => (
               <CategoryItem
