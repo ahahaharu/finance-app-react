@@ -171,7 +171,7 @@ export default function TransferModal({
           <Input placeholder="Comment" style={{ width: 275 }} />
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 7, span: 14 }}>
+        <Form.Item wrapperCol={{ offset: 10, span: 14 }}>
           <div className="flex justify-end gap-2">
             <Button key="cancel" onClick={onCancel}>
               Cancel
