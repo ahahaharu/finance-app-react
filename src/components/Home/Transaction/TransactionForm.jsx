@@ -21,7 +21,7 @@ export default function TransactionForm({
   const { categories } = useCategories();
   const { accounts } = useAccounts();
   const { getBalanceByAccount } = useTransactions();
-  const { currencies } = useSettings();
+  const { currencies, currentCurrency } = useSettings();
   const [moreCategoriesModalOpen, setMoreCategoriesModalOpen] = useState(false);
   const [anotherCategorySelected, setAnotherCategorySelected] = useState(false);
 
@@ -113,7 +113,9 @@ export default function TransactionForm({
                     {account.name}
                   </span>
                 </div>
-                <span>{getBalanceByAccount(account.id)} USD</span>
+                <span>
+                  {getBalanceByAccount(account.id)} {currentCurrency}
+                </span>
               </div>
             </Select.Option>
           ))}

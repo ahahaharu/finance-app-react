@@ -4,6 +4,7 @@ import { useSettings } from './SettingsContext';
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { createTransaction } from '../models/transaction';
+import { createTransfer } from '../models/transfer';
 
 const TransactionsContext = createContext();
 
@@ -16,7 +17,7 @@ export function TransactionsProvider({ children }) {
   const { categories } = useCategories();
   const { currentCurrency } = useSettings();
   const [exchangeRates, setExchangeRates] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const API_KEY = import.meta.env.VITE_EXCHANGE_API_KEY;
@@ -71,6 +72,11 @@ export function TransactionsProvider({ children }) {
   const addTransaction = (transactionData) => {
     const newTransaction = createTransaction(transactionData);
     setTransactions((prev) => [...prev, newTransaction]);
+  };
+
+  const addTransfer = (transferData) => {
+    const newTransfer = createTransfer(transferData);
+    setTransactions((prev) => [...prev, newTransfer]);
   };
 
   const editTransaction = (id, newData) => {
@@ -267,8 +273,10 @@ export function TransactionsProvider({ children }) {
         );
         if (cur.type === 'Income') {
           return acc + convertedAmount;
-        } else {
+        } else if (cur.type === 'Expense') {
           return acc - convertedAmount;
+        } else {
+          return acc;
         }
       }, 0)
       .toFixed(2);
@@ -284,25 +292,33 @@ export function TransactionsProvider({ children }) {
     if (loading || error || !API_KEY) return 0;
 
     const filteredTransactions = transactions.filter(
-      (trans) => trans.account === accountId
+      (trans) =>
+        trans.account === accountId ||
+        trans.from === accountId ||
+        trans.to === accountId
     );
+
     const balance = filteredTransactions.reduce((acc, cur) => {
       const convertedAmount =
         cur.currency === currentCurrency
           ? cur.amount
-          : Number(cur.amount / (exchangeRates[cur.currency] || 1));
-      console.log(
-        `Converting ${cur.amount} ${
-          cur.currency
-        } to ${currentCurrency}: ${convertedAmount} (rate: ${
-          exchangeRates[cur.currency]
-        })`
-      );
+          : Number(
+              (cur.amount / (exchangeRates[cur.currency] || 1)).toFixed(2)
+            );
+
       if (cur.type === 'Income') {
         return acc + convertedAmount;
-      } else {
+      } else if (cur.type === 'Expense') {
         return acc - convertedAmount;
+      } else if (cur.type === 'Transfer') {
+        if (cur.from === accountId) {
+          return acc - convertedAmount;
+        } else if (cur.to === accountId) {
+          return acc + convertedAmount;
+        }
       }
+
+      return acc;
     }, 0);
 
     return balance.toFixed(2);
@@ -311,6 +327,7 @@ export function TransactionsProvider({ children }) {
   const value = {
     transactions,
     addTransaction,
+    addTransfer,
     editTransaction,
     removeTransaction,
     getTransactionsByCategory,
