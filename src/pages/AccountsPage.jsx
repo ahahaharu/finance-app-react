@@ -6,10 +6,13 @@ import { ArrowLeftRight, ClipboardClock, Plus } from 'lucide-react';
 import Button from '../components/UI/Button';
 import CreateAccountModal from '../components/Home/Modal/CreateAccountModal';
 import TransferModal from '../components/Home/Modal/TransferModal';
+import TransferHistoryModal from '../components/Home/Modal/TransferHistoryModal';
 
 export default function AccountsPage() {
   const [createAccountModalOpen, setCreateAccountModalOpen] = useState(false);
   const [transferModalOpen, setTransferModalOpen] = useState(false);
+  const [transferHistoryModalOpen, setTransferHistoryModalOpen] =
+    useState(false);
 
   return (
     <Wrapper>
@@ -28,7 +31,12 @@ export default function AccountsPage() {
         >
           Transfer
         </Button>
-        <Button icon={<ClipboardClock />}>History</Button>
+        <Button
+          icon={<ClipboardClock />}
+          onClick={() => setTransferHistoryModalOpen(true)}
+        >
+          Transfer History
+        </Button>
       </div>
       <AccountCards />
       <CreateAccountModal
@@ -39,6 +47,11 @@ export default function AccountsPage() {
       <TransferModal
         isOpen={transferModalOpen}
         onCancel={() => setTransferModalOpen(false)}
+      />
+      <TransferHistoryModal
+        title={'Transfer History'}
+        isOpen={transferHistoryModalOpen}
+        onCancel={() => setTransferHistoryModalOpen(false)}
       />
     </Wrapper>
   );
