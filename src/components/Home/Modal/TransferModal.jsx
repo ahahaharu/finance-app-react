@@ -4,16 +4,18 @@ import { useAccounts } from '../../../context/AccountsContext';
 import { getAccountIconComponent } from '../../../utils/getIconComponent';
 import { useTransactions } from '../../../context/TransactionsContext';
 import { useSettings } from '../../../context/SettingsContext';
+import dayjs from 'dayjs';
 
 export default function TransferModal({
   isOpen,
   onCancel,
   isEditMode = false,
+  initialData = null,
 }) {
   const [form] = Form.useForm();
   const { accounts } = useAccounts();
   const { currencies, currentCurrency } = useSettings();
-  const { addTransfer, getBalanceByAccount } = useTransactions();
+  const { addTransfer, editTransfer, getBalanceByAccount } = useTransactions();
 
   const fromAccountId = Form.useWatch('from', form);
   const toAccountId = Form.useWatch('to', form);
@@ -25,6 +27,20 @@ export default function TransferModal({
   const filteredToAccounts = useMemo(() => {
     return accounts.filter((account) => account.id !== fromAccountId);
   }, [accounts, fromAccountId]);
+
+  useEffect(() => {
+    if (isOpen && isEditMode) {
+      form.resetFields();
+      form.setFieldsValue({
+        from: initialData.from,
+        to: initialData.to,
+        amount: initialData.amount,
+        currency: initialData.currency,
+        date: dayjs(initialData.date),
+        comment: initialData.comment,
+      });
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (
@@ -58,7 +74,7 @@ export default function TransferModal({
       comment: values.comment,
     };
     if (isEditMode) {
-      addTransfer(initialData.id, newTransfer);
+      editTransfer(initialData.id, newTransfer);
     } else {
       addTransfer(newTransfer);
     }

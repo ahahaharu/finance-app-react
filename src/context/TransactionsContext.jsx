@@ -87,10 +87,18 @@ export function TransactionsProvider({ children }) {
     );
   };
 
+  const editTransfer = (id, newData) => {
+    editTransaction(id, newData);
+  };
+
   const removeTransaction = (id) => {
     setTransactions((prev) =>
       prev.filter((transaction) => transaction.id !== id)
     );
+  };
+
+  const removeTransfer = (id) => {
+    removeTransaction(id);
   };
 
   const getTransactionsByCategory = (filteredTransactions) => {
@@ -329,7 +337,9 @@ export function TransactionsProvider({ children }) {
     addTransaction,
     addTransfer,
     editTransaction,
+    editTransfer,
     removeTransaction,
+    removeTransfer,
     getTransactionsByCategory,
     getFilteredCategoriesWithAmount,
     getBalanceByPeriod,

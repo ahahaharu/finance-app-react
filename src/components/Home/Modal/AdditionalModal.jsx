@@ -1,19 +1,5 @@
-import {
-  Button,
-  DatePicker,
-  Form,
-  Input,
-  Modal,
-  Radio,
-  Select,
-  Space,
-  Tabs,
-} from 'antd';
+import { Form, Modal, Tabs } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { CircleEllipsis } from 'lucide-react';
-import CategoryItem from '../Category/CategoryItem';
-import MoreCategoriesModal from './MoreCategoriesModal';
-import { useCategories } from '../../../context/CategoryContext';
 import dayjs from 'dayjs';
 import { useTransactions } from '../../../context/TransactionsContext';
 import TransactionForm from '../Transaction/TransactionForm';

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTransactions } from '../../../context/TransactionsContext';
 import { Modal } from 'antd';
 import TransferCard from '../Transfer/TransferCard';
+import TransferInfoModal from './TransferInfoModal';
 
 export default function TransferHistoryModal({ title, isOpen, onCancel }) {
   const { transactions } = useTransactions();
@@ -59,15 +60,15 @@ export default function TransferHistoryModal({ title, isOpen, onCancel }) {
         )}
       </div>
 
-      {/* {selectedTransactionId && (
-        <TransactionInfoModal
-          key={selectedTransaction.id}
-          title="Transaction Info"
-          isOpen={!!selectedTransactionId}
+      {selectedTransferId && (
+        <TransferInfoModal
+          key={selectedTransfer.id}
+          title={'Transfer Info'}
+          isOpen={!!selectedTransferId}
           onCancel={handleModalClose}
-          transaction={selectedTransaction}
+          transfer={selectedTransfer}
         />
-      )} */}
+      )}
     </Modal>
   );
 }
