@@ -3,6 +3,7 @@ import { useTransactions } from '../../../context/TransactionsContext';
 import { Modal } from 'antd';
 import TransferCard from '../Transfer/TransferCard';
 import TransferInfoModal from './TransferInfoModal';
+import AdjustmentCard from '../Adjustment/AdjustmentCard';
 
 export default function TransferHistoryModal({ title, isOpen, onCancel }) {
   const { transactions } = useTransactions();
@@ -10,7 +11,9 @@ export default function TransferHistoryModal({ title, isOpen, onCancel }) {
 
   const groupedTransfers = React.useMemo(() => {
     const sortedTransfers = transactions
-      .filter((trans) => trans.type === 'Transfer')
+      .filter(
+        (trans) => trans.type === 'Transfer' || trans.type === 'Adjustment'
+      )
       .sort((a, b) => new Date(b.date) - new Date(a.date));
 
     return sortedTransfers.reduce((acc, transaction) => {
@@ -43,13 +46,24 @@ export default function TransferHistoryModal({ title, isOpen, onCancel }) {
             <div key={date} className="mb-4">
               <h2 className="font-bold mb-1">{date}</h2>
               <div className="flex flex-col gap-2">
-                {transactions.map((transfer) => (
-                  <TransferCard
-                    key={transfer.id}
-                    transfer={transfer}
-                    onClick={() => setSelectedTransferId(transfer.id)}
-                  />
-                ))}
+                {transactions.map((transaction) => {
+                  if (transaction.type === 'Transfer') {
+                    return (
+                      <TransferCard
+                        key={transaction.id}
+                        transfer={transaction}
+                        onClick={() => setSelectedTransferId(transaction.id)}
+                      />
+                    );
+                  } else if (transaction.type === 'Adjustment') {
+                    return (
+                      <AdjustmentCard
+                        key={transaction.id}
+                        adjustment={transaction}
+                      />
+                    );
+                  }
+                })}
               </div>
             </div>
           ))
