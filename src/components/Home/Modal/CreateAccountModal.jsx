@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Radio } from 'antd';
+import { Button, Form, Input, InputNumber, Modal, Radio } from 'antd';
 import React, { useEffect, useState } from 'react';
 import {
   ACCOUNTS_ICONS,
@@ -7,6 +7,8 @@ import {
 import { CircleEllipsis, Plus } from 'lucide-react';
 import { ChromePicker } from 'react-color';
 import { useAccounts } from '../../../context/AccountsContext';
+import { useSettings } from '../../../context/SettingsContext';
+import { useTransactions } from '../../../context/TransactionsContext';
 
 export default function CreateAccountModal({
   title,
@@ -20,20 +22,51 @@ export default function CreateAccountModal({
   const [selectedColor, setSelectedColor] = useState({ hex: COLORS.red });
   const [pickerOpened, setPickerOpened] = useState(false);
   const [isColorPickerColor, setIsColorPickerColor] = useState(false);
+  const [prevIsOpen, setPrevIsOpen] = useState(false); // Защита от повторного ресета
   const { addAccount, editAccount, removeAccount } = useAccounts();
+  const { currentCurrency } = useSettings();
+  const { getBalanceByAccount, createBalanceAdjustment } = useTransactions();
 
   useEffect(() => {
-    if (isOpen && isEditMode) {
+    if (isOpen && !prevIsOpen) {
       form.resetFields();
-      form.setFieldsValue({
-        accountName: initialData.name,
-        icon: initialData.icon,
-        color: initialData.color,
-      });
-      setSelectedIcon(initialData.icon);
-      setSelectedColor({ hex: COLORS[initialData.color] });
+      setPickerOpened(false);
+      setIsColorPickerColor(false);
+
+      if (isEditMode && initialData) {
+        const accountAmount = Number(getBalanceByAccount(initialData.id)) || 0;
+        const initialColor = initialData.color;
+        const colorHex = COLORS[initialColor] || initialColor; // Для кастомного hex
+        form.setFieldsValue({
+          accountName: initialData.name,
+          icon: initialData.icon,
+          color: initialColor,
+          amount: accountAmount,
+        });
+        setSelectedIcon(initialData.icon);
+        setSelectedColor({ hex: colorHex });
+        setIsColorPickerColor(!COLORS[initialColor]);
+      } else {
+        form.setFieldsValue({
+          accountName: '',
+          icon: 'Card',
+          color: 'red',
+          amount: 0, // Теперь отображается '0'. Если хочешь плейсхолдер — замени на undefined
+        });
+        setSelectedIcon('Card');
+        setSelectedColor({ hex: COLORS.red });
+      }
     }
-  }, [isOpen]);
+    setPrevIsOpen(isOpen);
+  }, [
+    isOpen,
+    prevIsOpen,
+    isEditMode,
+    initialData,
+    form,
+    getBalanceByAccount,
+    currentCurrency,
+  ]);
 
   function handleSubmit(values) {
     console.log('Form values:', values);
@@ -42,11 +75,21 @@ export default function CreateAccountModal({
       icon: values.icon,
       color: values.color,
     };
+    const currentBalance = isEditMode
+      ? Number(getBalanceByAccount(initialData.id)) || 0
+      : 0;
+    const targetAmount =
+      values.amount != null ? Number(values.amount) : currentBalance;
+    console.log(currentBalance, targetAmount);
+    const amount = targetAmount - currentBalance;
+    let accountId;
     if (isEditMode) {
-      editAccount(initialData.id, newAccount);
+      accountId = initialData.id;
+      editAccount(accountId, newAccount);
     } else {
-      addAccount(newAccount);
+      accountId = addAccount(newAccount);
     }
+    createBalanceAdjustment(amount, currentCurrency, accountId);
     onCancel();
   }
 
@@ -96,8 +139,6 @@ export default function CreateAccountModal({
         onFinish={handleSubmit}
         onFinishFailed={onFinishFailed}
         initialValues={{
-          type: 'Expenses',
-          icon: 'Utensils',
           color: 'red',
         }}
         style={{ maxWidth: 600 }}
@@ -106,9 +147,17 @@ export default function CreateAccountModal({
           label="Account Name"
           name="accountName"
           rules={[{ required: true, message: 'Please input account name' }]}
-          style={{ marginBottom: '20px' }}
         >
           <Input placeholder="Account Name" />
+        </Form.Item>
+        <Form.Item label="Amount" name="amount">
+          <InputNumber
+            placeholder="Amount"
+            style={{ width: 275 }}
+            addonAfter={currentCurrency}
+            precision={2}
+            step={0.01}
+          />
         </Form.Item>
         <Form.Item
           label="Icon"
@@ -136,7 +185,7 @@ export default function CreateAccountModal({
           name="color"
           rules={[{ required: true, message: 'Please select a color!' }]}
         >
-          <div className="flex flex-wrap gap-3 items- justify-center relative">
+          <div className="flex flex-wrap gap-3 items-center justify-center relative">
             {Object.keys(COLORS)
               .slice(0, 7)
               .map((colorKey) => (
@@ -192,7 +241,7 @@ export default function CreateAccountModal({
                 Delete Account
               </Button>
             )}
-            <Button type="primary" htmlType="submit" onSubmit={handleSubmit}>
+            <Button type="primary" htmlType="submit">
               {isEditMode ? 'Edit Account' : 'Add Account'}
             </Button>
           </div>

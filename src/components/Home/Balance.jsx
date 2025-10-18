@@ -7,7 +7,6 @@ export default function Balance() {
   const { getBalanceByPeriod, loading } = useTransactions();
   const { currentCurrency } = useSettings();
 
-  console.log(getBalanceByPeriod(), loading);
   return (
     <div className="my-10">
       <div>

@@ -6,7 +6,6 @@ export default function NavElement({ children, to }) {
   const navigate = useNavigate();
 
   const isActive = location.pathname === to;
-  console.log(location.pathname);
   return (
     <li
       className={`px-10 py-2 rounded-md  cursor-pointer ${

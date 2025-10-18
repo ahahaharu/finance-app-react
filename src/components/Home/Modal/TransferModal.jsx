@@ -156,13 +156,6 @@ export default function TransferModal({
         <Form.Item label="Amount" name="amount" rules={[{ required: true }]}>
           <Space.Compact style={{ width: '100%' }}>
             <Form.Item
-              name="amount"
-              rules={[{ required: true, message: 'Please input the Amount!' }]}
-              style={{ marginBottom: 0 }}
-            >
-              <Input placeholder="Amount" style={{ width: 155 }} />
-            </Form.Item>
-            <Form.Item
               name="currency"
               rules={[{ required: true, message: 'Please select Currency' }]}
               style={{ marginBottom: 0 }}

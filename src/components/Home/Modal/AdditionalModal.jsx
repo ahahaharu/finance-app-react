@@ -26,7 +26,6 @@ export default function AdditionalModal({
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [currentTransactionType, setCurrentTransactionType] =
     useState(transactionType);
-  console.log(currentTransactionType);
 
   const { addTransaction, editTransaction } = useTransactions();
 
@@ -53,7 +52,6 @@ export default function AdditionalModal({
   };
 
   const onChange = (key) => {
-    console.log(key);
     setCurrentTransactionType(items.find((item) => item.key === key).label);
   };
 

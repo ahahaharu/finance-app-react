@@ -5,6 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { createTransaction } from '../models/transaction';
 import { createTransfer } from '../models/transfer';
+import { createAdjustment } from '../models/adjustment';
 
 const TransactionsContext = createContext();
 
@@ -72,11 +73,13 @@ export function TransactionsProvider({ children }) {
   const addTransaction = (transactionData) => {
     const newTransaction = createTransaction(transactionData);
     setTransactions((prev) => [...prev, newTransaction]);
+    return newTransaction.id;
   };
 
   const addTransfer = (transferData) => {
     const newTransfer = createTransfer(transferData);
     setTransactions((prev) => [...prev, newTransfer]);
+    return newTransfer.id;
   };
 
   const editTransaction = (id, newData) => {
@@ -99,6 +102,19 @@ export function TransactionsProvider({ children }) {
 
   const removeTransfer = (id) => {
     removeTransaction(id);
+  };
+
+  const createBalanceAdjustment = (amount, currency, account) => {
+    if (amount == 0) return;
+
+    console.log(amount);
+
+    const balanceAdjustment = createAdjustment({
+      amount,
+      currency,
+      account,
+    });
+    setTransactions((prev) => [...prev, balanceAdjustment]);
   };
 
   const getTransactionsByCategory = (filteredTransactions) => {
@@ -272,20 +288,13 @@ export function TransactionsProvider({ children }) {
           cur.currency === currentCurrency
             ? cur.amount
             : Number(cur.amount / (exchangeRates[cur.currency] || 1));
-        console.log(
-          `Converting ${cur.amount} ${
-            cur.currency
-          } to ${currentCurrency}: ${convertedAmount} (rate: ${
-            exchangeRates[cur.currency]
-          })`
-        );
         if (cur.type === 'Income') {
           return acc + convertedAmount;
         } else if (cur.type === 'Expense') {
           return acc - convertedAmount;
-        } else {
-          return acc;
-        }
+        } else if (cur.type === 'Adjustment') {
+          return acc + convertedAmount;
+        } else return acc;
       }, 0)
       .toFixed(2);
 
@@ -324,8 +333,9 @@ export function TransactionsProvider({ children }) {
         } else if (cur.to === accountId) {
           return acc + convertedAmount;
         }
+      } else if (cur.type === 'Adjustment') {
+        return acc + convertedAmount;
       }
-
       return acc;
     }, 0);
 
@@ -340,6 +350,7 @@ export function TransactionsProvider({ children }) {
     editTransfer,
     removeTransaction,
     removeTransfer,
+    createBalanceAdjustment,
     getTransactionsByCategory,
     getFilteredCategoriesWithAmount,
     getBalanceByPeriod,

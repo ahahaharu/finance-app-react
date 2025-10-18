@@ -29,6 +29,7 @@ export function AccountsProvider({ children }) {
   const addAccount = (data) => {
     const newAccount = createAccount(data);
     setAccounts((prev) => [...prev, newAccount]);
+    return newAccount.id;
   };
 
   const editAccount = (id, newData) => {
