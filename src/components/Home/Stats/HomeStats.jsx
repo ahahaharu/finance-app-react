@@ -3,7 +3,7 @@ import HomeStatsPeriods from './HomeStatsPeriods';
 import HomeStatsChoosePeriod from './HomeStatsChoosePeriod';
 import Button from '../../UI/Button';
 import { ClipboardClock, Plus } from 'lucide-react';
-import Chart from './Chart';
+import Chart from '../../Accounts/Chart';
 import AdditionalModal from '../Modal/AdditionalModal';
 import TransactionHistoryModal from '../Modal/TransactionHistoryModal';
 

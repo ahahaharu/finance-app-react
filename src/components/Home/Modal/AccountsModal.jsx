@@ -1,7 +1,7 @@
 import { Button, Flex, Modal, Radio } from 'antd';
 import React, { useState } from 'react';
 import { useAccounts } from '../../../context/AccountsContext';
-import AccountCard from '../Cards/AccountCard';
+import AccountCard from '../../Accounts/Cards/AccountCard';
 import { getAccountIconComponent } from '../../../utils/getIconComponent';
 import { useTransactions } from '../../../context/TransactionsContext';
 import { useSettings } from '../../../context/SettingsContext';

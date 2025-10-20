@@ -1,7 +1,7 @@
 import React from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
-import { useTransactions } from '../../../context/TransactionsContext';
-import { useSettings } from '../../../context/SettingsContext';
+import { useTransactions } from '../../context/TransactionsContext';
+import { useSettings } from '../../context/SettingsContext';
 
 export default function Chart({
   periodFilter,

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Wrapper from '../components/Wrapper/Wrapper';
 import Balance from '../components/Home/Balance';
-import AccountCards from '../components/Home/Cards/AccountCards';
+import AccountCards from '../components/Accounts/Cards/AccountCards';
 import {
   ArrowLeftRight,
   ClipboardClock,
@@ -9,9 +9,9 @@ import {
   WalletMinimal,
 } from 'lucide-react';
 import Button from '../components/UI/Button';
-import CreateAccountModal from '../components/Home/Modal/CreateAccountModal';
-import TransferModal from '../components/Home/Modal/TransferModal';
-import TransferHistoryModal from '../components/Home/Modal/TransferHistoryModal';
+import CreateAccountModal from '../components/Accounts/Modal/CreateAccountModal';
+import TransferModal from '../components/Accounts/Modal/TransferModal';
+import TransferHistoryModal from '../components/Accounts/Modal/TransferHistoryModal';
 
 export default function AccountsPage() {
   const [createAccountModalOpen, setCreateAccountModalOpen] = useState(false);
@@ -23,8 +23,8 @@ export default function AccountsPage() {
     <Wrapper>
       <div className="my-7">
         <div className="flex gap-2 items-center justify-center">
-          <WalletMinimal size={15} />
-          <span>Total Balance</span>
+          <WalletMinimal size={30} />
+          <span className="text-xl">Total Balance</span>
         </div>
         <Balance />
       </div>

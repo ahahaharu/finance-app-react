@@ -4,7 +4,7 @@ import Wrapper from '../components/Wrapper/Wrapper';
 import Balance from '../components/Home/Balance';
 import HomeStats from '../components/Home/Stats/HomeStats';
 import SourceCards from '../components/Home/Cards/SourceCards';
-import TransactionSwitch from '../components/TransactionSwitch/TransactionSwitch';
+import TransactionSwitch from '../components/Home/TransactionSwitch/TransactionSwitch';
 import PeriodPickerModal from '../components/Home/Modal/PeriodPickerModal';
 import { ChevronDown, WalletMinimal } from 'lucide-react';
 import AccountsModal from '../components/Home/Modal/AccountsModal';

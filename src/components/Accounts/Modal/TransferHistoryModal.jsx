@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTransactions } from '../../../context/TransactionsContext';
 import { Modal } from 'antd';
-import TransferCard from '../Transfer/TransferCard';
+import TransferCard from '../../Home/Transfer/TransferCard';
 import TransferInfoModal from './TransferInfoModal';
 import AdjustmentCard from '../Adjustment/AdjustmentCard';
 
