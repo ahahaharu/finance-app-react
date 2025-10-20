@@ -7,6 +7,7 @@ export default function SourceCards({
   periodFilter,
   offset,
   transactionType,
+  accountId,
   startDate,
   endDate,
 }) {
@@ -17,6 +18,7 @@ export default function SourceCards({
     periodFilter,
     offset,
     transactionType,
+    accountId,
     periodFilter === 'period' && startDate && endDate ? startDate : null,
     periodFilter === 'period' && startDate && endDate ? endDate : null
   );

@@ -22,6 +22,7 @@ export default function HomeStats({
   searchParams,
   setSearchParams,
   transactionType,
+  accountId,
 }) {
   const [additionalModalOpen, setAdditionalModalOpen] = useState(false);
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
@@ -72,6 +73,7 @@ export default function HomeStats({
         periodFilter={periodFilter}
         offset={offset}
         transactionType={transactionType}
+        accountId={accountId}
         startDate={startDate}
         endDate={endDate}
       />

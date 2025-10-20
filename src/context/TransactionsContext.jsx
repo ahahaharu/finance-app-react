@@ -136,6 +136,7 @@ export function TransactionsProvider({ children }) {
     periodFilter,
     offset = 0,
     transactionType = null,
+    accountId = null,
     startDate = null,
     endDate = null
   ) => {
@@ -143,9 +144,15 @@ export function TransactionsProvider({ children }) {
       return [...transactions];
     }
 
-    const transactionsToFilter = transactions.filter(
+    let transactionsToFilter = transactions.filter(
       (trans) => trans.type.toLowerCase() === transactionType
     );
+
+    if (accountId) {
+      transactionsToFilter = transactionsToFilter.filter(
+        (trans) => trans.account === accountId
+      );
+    }
     const now = new Date();
 
     const effectiveStartDate = startDate
@@ -246,6 +253,7 @@ export function TransactionsProvider({ children }) {
     periodFilter,
     offset = 0,
     transactionType,
+    accountId,
     startDate = null,
     endDate = null
   ) => {
@@ -253,6 +261,7 @@ export function TransactionsProvider({ children }) {
       periodFilter,
       offset,
       transactionType,
+      accountId,
       startDate,
       endDate
     );

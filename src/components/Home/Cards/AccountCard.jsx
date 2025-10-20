@@ -10,7 +10,7 @@ export default function AccountCard({ account, onClick }) {
   const styleColor = account.color;
   return (
     <div
-      className="flex justify-between items-center border-[#1677ff] border-2 p-3 rounded-2xl shadow-md hover:bg-sky-50 cursor-pointer"
+      className="flex justify-between items-center border-[#1677ff] border-2 p-3 rounded-2xl shadow-md w-full hover:bg-sky-50 cursor-pointer"
       onClick={onClick}
     >
       <div

@@ -76,13 +76,13 @@ export default function HomeStatsChoosePeriod({
     <div className="flex justify-between min-w-[220px] items-center text-black mt-5">
       <ChevronLeft
         size={20}
-        className="cursor-pointer"
+        className="cursor-pointer rounded-full hover:bg-indigo-50"
         onClick={() => shiftPeriod('left')}
       />
       {periodRange}
       <ChevronRight
         size={20}
-        className="cursor-pointer"
+        className="cursor-pointer rounded-full hover:bg-indigo-50"
         onClick={() => shiftPeriod('right')}
       />
     </div>
